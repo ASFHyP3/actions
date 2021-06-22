@@ -1,0 +1,18 @@
+name: trufflehog
+description: Scan for secrets with trufflehog
+
+runs:
+  using: "composite"
+  steps:
+    - name: Pip install trufflehog
+      shell: bash
+      run: |
+        python -m pip install trufflehog
+
+    - name: Scan for secrets with trufflehog
+      shell: bash
+      run: |
+        git fetch origin +refs/tags/*:refs/tags/*
+        export LAST_TAG_HASH=$(git rev-list -1 $(git describe --abbrev=0))
+        trufflehog --regex --entropy True --since_commit "${LAST_TAG_HASH}" \
+            --exclude_paths .trufflehog.txt file://"${PWD}"
