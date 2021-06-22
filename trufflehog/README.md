@@ -11,7 +11,7 @@ for secrets in the git commit history back to the last git tag
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # needed to checkout git tags
 
       - uses: actions/setup-python@v1
         with:
@@ -20,4 +20,5 @@ for secrets in the git commit history back to the last git tag
       - uses: ASFHyP3/actions/trufflehog@master
 ```
 
-*Note: `fetch-depth: 0` is required to checkout git tags.* 
+**Note:** This action **requires** you to have a [`.trufflhog.txt`](../.trufflehog.txt)
+at the root of your repository.  
