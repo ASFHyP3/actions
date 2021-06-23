@@ -15,7 +15,7 @@ for secrets in the git commit history back to the last git tag
 
       - uses: actions/setup-python@v1
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - uses: ASFHyP3/actions/trufflehog@master
 ```
