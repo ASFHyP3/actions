@@ -1,0 +1,114 @@
+on:
+  workflow_call:
+    inputs:
+      email:
+        required: false
+        default: UAF-asf-apd@alaska.edu
+        type: string
+      user:
+        required: false
+        default: tools-bot
+        type: string
+    secrets:
+      USER_TOKEN:
+        required: true
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.USER_TOKEN }}
+
+      - name: Query associated PR
+        id: get_associated_pr
+        uses: octokit/graphql-action@v2.x
+        with:
+          query: |
+            query($owner:String!, $name:String!, $sha:String!) {
+                repository(owner:$owner, name:$name) {
+                  commit: object(expression:$sha) {
+                    ... on Commit {
+                      associatedPullRequests(first:1, orderBy:{field: UPDATED_AT, direction: DESC}){
+                        edges{
+                          node{
+                            title
+                            number
+                            body
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+          owner: ${{ github.repository_owner }}
+          name: ${{ github.event.repository.name }}
+          sha: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+
+      - name: Get PR Number
+        run: |
+          PR_QUERY='.data.repository.commit.associatedPullRequests.edges[0].node.number'
+          PR_NUMBER=$(echo '${{ steps.get_associated_pr.outputs.data }}' | jq --raw-output  "${PR_QUERY}")
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+
+      - name: Query PR labels
+        id: get_pr_labels
+        uses: octokit/graphql-action@v2.x
+        with:
+          query: |
+            query($owner:String!, $name:String!, $pr:Int!) {
+              repository(owner:$owner, name:$name) {
+                pullRequest(number:$pr) {
+                  labels(first:100) {
+                    nodes {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          owner: ${{ github.repository_owner }}
+          name: ${{ github.event.repository.name }}
+          pr: $${{ env.PR_NUMBER }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+
+      - name: Get Bump Part
+        run: |
+          LABEL_QUERY='.data.repository.pullRequest.labels.nodes[].name'
+          SELECT='select(. == "major" or . == "minor" or . == "patch")'
+          PR_LABLES=$(echo '${{ steps.get_pr_labels.outputs.data }}' | jq --raw-output  "${LABEL_QUERY} | ${SELECT}")
+          echo "BUMP_PART=$(echo ${PR_LABELS} | sort | head -1)" >> $GITHUB_ENV
+
+      - name: Get Tag Message
+        if: env.BUMP_PART != 'bumpless'
+        run: |
+          PR_QUERY='.data.repository.commit.associatedPullRequests.edges[0].node.title'
+          TAG_MSG=$(echo '${{ steps.get_associated_pr.outputs.data }}' | jq --raw-output "${PR_QUERY}")
+          echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
+
+      - uses: actions/setup-python@v1
+        if: env.BUMP_PART != 'bumpless'
+        with:
+          python-version: 3.x
+
+      - name: install python dependencies
+        if: env.BUMP_PART != 'bumpless'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install bump2version
+
+      - name: Tag version
+        if: env.BUMP_PART != 'bumpless'
+        run: |
+          git fetch origin +refs/tags/*:refs/tags/*
+          git config user.email ${{ inputs.email }}
+          git config user.name ${{ inputs.user }}
+          bump2version --current-version $(git describe --abbrev=0) --tag --tag-message "${TAG_MSG}" "${BUMP_PART}"
+          git push --tags
+          echo "Tagged version $(git describe --abbrev=0) and pushed back to repo"
