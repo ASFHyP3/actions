@@ -27,7 +27,7 @@ jobs:
         uses: octokit/graphql-action@v2.x
         with:
           query: |
-            query($owner:String!, $name:String!, $sha:String!) {
+            query pr($owner:String!, $name:String!, $sha:String!) {
                 repository(owner:$owner, name:$name) {
                   commit: object(expression:$sha) {
                     ... on Commit {
@@ -51,9 +51,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
 
       - name: Get PR Number
+        env:
+          PR_DATA: ${{ steps.get_associated_pr.outputs.data }}
         run: |
-          PR_QUERY='.data.repository.commit.associatedPullRequests.edges[0].node.number'
-          PR_NUMBER=$(echo '${{ steps.get_associated_pr.outputs.data }}' | jq --raw-output  "${PR_QUERY}")
+          PR_NUMBER_QUERY='.repository.commit.associatedPullRequests.edges[0].node.number'
+          PR_NUMBER=$(jq --raw-output  "${PR_NUMBER_QUERY}" <<< ${PR_DATA})
           echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
 
       - name: Query PR labels
@@ -61,7 +63,7 @@ jobs:
         uses: octokit/graphql-action@v2.x
         with:
           query: |
-            query($owner:String!, $name:String!, $pr:Int!) {
+            query labels($owner:String!, $name:String!, $pr:Int!) {
               repository(owner:$owner, name:$name) {
                 pullRequest(number:$pr) {
                   labels(first:100) {
@@ -74,22 +76,26 @@ jobs:
             }
           owner: ${{ github.repository_owner }}
           name: ${{ github.event.repository.name }}
-          pr: $${{ env.PR_NUMBER }}
+          pr: ${{ env.PR_NUMBER }}
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
 
       - name: Get Bump Part
+        env:
+          LABELS_DATA: ${{ steps.get_pr_labels.outputs.data }}
         run: |
-          LABEL_QUERY='.data.repository.pullRequest.labels.nodes[].name'
-          SELECT='select(. == "major" or . == "minor" or . == "patch")'
-          PR_LABLES=$(echo '${{ steps.get_pr_labels.outputs.data }}' | jq --raw-output  "${LABEL_QUERY} | ${SELECT}")
+          LABEL_QUERY='.repository.pullRequest.labels.nodes[].name'
+          SELECT='select(. == "major" or . == "minor" or . == "patch" or . == "bumpless")'
+          PR_LABELS=$(jq --raw-output  "${LABEL_QUERY} | ${SELECT}" <<< ${LABELS_DATA})
           echo "BUMP_PART=$(echo ${PR_LABELS} | sort | head -1)" >> $GITHUB_ENV
 
       - name: Get Tag Message
         if: env.BUMP_PART != 'bumpless'
+        env:
+          PR_DATA: ${{ steps.get_associated_pr.outputs.data }}
         run: |
-          PR_QUERY='.data.repository.commit.associatedPullRequests.edges[0].node.title'
-          TAG_MSG=$(echo '${{ steps.get_associated_pr.outputs.data }}' | jq --raw-output "${PR_QUERY}")
+          PR_TITLE_QUERY='.repository.commit.associatedPullRequests.edges[0].node.title'
+          TAG_MSG=$(jq --raw-output "${PR_TITLE_QUERY}" <<< ${PR_DATA})
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
 
       - uses: actions/setup-python@v1
