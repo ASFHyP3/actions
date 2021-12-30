@@ -12,7 +12,7 @@ on:
         required: false
         default: develop
         type: string
-      release_pr_label:
+      sync_pr_label:
         required: false
         default: tools-bot
         type: string
@@ -36,7 +36,7 @@ jobs:
           RELEASE_NAME_PREFIX: "${{ inputs.release_prefix }} "
           ALLOW_TAG_PREFIX: true
 
-      - name: Attempt fast-forward develop from main
+      - name: Attempt fast-forward develop from release
         run: |
           git fetch --prune
           git checkout ${{ inputs.develop_branch }} && git pull --ff-only
@@ -52,7 +52,7 @@ jobs:
           pr_title: Pulling ${{ github.ref }} into ${{ inputs.develop_branch }}
           pr_body: Fast-forward of ${{ inputs.release_branch }} to ${{ inputs.develop_branch }} failed!
           pr_assignee: ${{ github.actor }}
-          pr_label: ${{ inputs.release_pr_label }}
+          pr_label: ${{ inputs.sync_pr_label }}
           pr_draft: false
           pr_allow_empty: true
           github_token: ${{ secrets.USER_TOKEN }}

@@ -1,6 +1,10 @@
-# Trufflehog Action
+# truffleHog Action
 
-A [trufflehog](https://github.com/trufflesecurity/truffleHog) action that looks
+**WARNING! This action has been depreciated in favor of the [`reusable-secrets-analysis.yml`](../.github/workflows/reusable-secrets-analysis.yml)
+[reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows).**
+See the [README](../README.md) for instructions on how to use the new workflow.
+
+A [truffleHog](https://github.com/trufflesecurity/truffleHog) action that looks
 for secrets in the git commit history back to the last git tag
 
 This requires you to have:
@@ -22,5 +26,5 @@ This requires you to have:
         with:
           python-version: 3.9
 
-      - uses: ASFHyP3/actions/trufflehog@master
+      - uses: ASFHyP3/actions/trufflehog@v0.2.0
 ```
