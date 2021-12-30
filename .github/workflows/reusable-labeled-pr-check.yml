@@ -1,0 +1,13 @@
+on:
+  workflow_call
+
+jobs:
+  bump-labeled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require Version Bump Labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 1
+          labels: "major, minor, patch, bumpless"
