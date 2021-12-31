@@ -87,13 +87,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@reusable-plugins
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@main
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@reusable-plugins
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@main
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       release_branch: main     # Optional; default shown
@@ -102,7 +102,6 @@ jobs:
     secrets:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
-
 
 ### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
 
@@ -166,7 +165,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@reusable-plugins
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@main
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       conda_env_name: hyp3-plugin      # Required; conda environment name to activate
@@ -245,7 +244,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@reusable-plugins
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@main
     with:
       conda_env_name: hyp3-plugin  # Required; conda environment name to activate
       python_version: '3.9'        # Optional; default shown
