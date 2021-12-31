@@ -64,6 +64,25 @@ jobs:
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
 
+### `resuable-flake8.yml`
+
+Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
+
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-flake8-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@main
+    with:
+      local_package_namkes: hyp3  # comma-seperated list of names that should be considered local to your application
+      excludes: ugly.py           # comma-separated list of glob patterns to exclude from checks
+```
+
+to ensure the Python code is styled correctly.
+
 ### `resuable-labeled-pr-check.yml`
 
 Ensures a PR has been appropriately labeled for a release. Use like:
