@@ -51,7 +51,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ env.REPO }}::${{ inputs.version_tag }}
+            ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           labels: |
             org.opencontainers.image.created=${{ env.CI_JOB_TIMESTAMP }}
             org.opencontainers.image.version=${{ inputs.version_tag }}
