@@ -1,0 +1,44 @@
+on:
+  workflow_call:
+    inputs:
+      conda_env_name:
+        required: true
+        type: string
+      python_version:
+        required: false
+        default: '3.9'
+        type: string
+    outputs:
+      version:
+        value: ${{ jobs.version_info.outputs.version }}
+      version_tag:
+        value: ${{ jobs.version_info.outputs.version_tag }}
+
+
+
+jobs:
+  version_info:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_outputs.outputs.version }}
+      version_tag: ${{ steps.set_outputs.outputs.version_tag }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          python-version: ${{ inputs.python_version }}
+          activate-environment: ${{ inputs.conda_env_name }}
+          environment-file: environment.yml
+
+      - name: set outputs
+        id: set_outputs
+        shell: bash -l {0}
+        run: |
+          git fetch origin +refs/tags/*:refs/tags/*
+          export SDIST_VERSION=$(python setup.py --version)
+          echo "::set-output name=version::${SDIST_VERSION}"
+          echo "::set-output name=version_tag::${SDIST_VERSION/+/_}"
