@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      version_tag:
+        required: true
+        type: string
+      ecr_registry:
+        required: true
+        type: string
+      aws_region:
+        required: false
+        default: us-west-2
+        type: string
+      release_branch:
+        required: false
+        default: main
+        type: string
+      develop_branch:
+        required: false
+        default: develop
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  dockerize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: set environment variables
+        shell: bash -l {0}
+        run: |
+          echo "CI_JOB_TIMESTAMP=$(date --utc --rfc-3339=seconds)" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ inputs.ecr_registry }}/${{ github.event.repository.name }}:${{ inputs.version_tag }}
+          labels: |
+            org.opencontainers.image.created=${{ env.CI_JOB_TIMESTAMP }}
+            org.opencontainers.image.version=${{ inputs.version_tag }}
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Add test tag
+        if: github.ref == 'refs/heads/${{ inputs.develop_branch }}'
+        uses: akhilerm/tag-push-action@v1.0.0
+        with:
+          src: ${{ inputs.ecr_registry }}/${{ github.event.repository.name }}:${{ inputs.version_tag }}
+          dst: ${{ inputs.ecr_registry }}/${{ github.event.repository.name }}:test
+
+      - name: Add latest tag
+        if: github.ref == 'refs/heads/${{ inputs.release_branch }}'
+        uses: akhilerm/tag-push-action@v1.0.0
+        with:
+          src: ${{ inputs.ecr_registry }}/${{ github.event.repository.name }}:${{ inputs.version_tag }}
+          dst: ${{ inputs.ecr_registry }}/${{ github.event.repository.name }}:latest
+
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ inputs.ecr_registry }}

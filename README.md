@@ -64,6 +64,47 @@ jobs:
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
 
+### [`reusable-docker-ecr.yml`](./.github/workflows/reusable-docker-ecr.yml)
+
+Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
+[Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
+with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
+Use like:
+
+```yaml
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@main
+    with:
+      conda_env_name: hyp3-plugin
+
+  call-docker-ecr-workflow:
+    needs: call-version-info-workflow
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@main
+    with:
+      version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
+      ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
+      aws_region: us-west-2    # Optional; default shown
+      release_branch: main     # Optional; default shown
+      develop_branch: develop  # Optional; default shown
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+```
+
 ### [`reusable-docker-ghcr.yml`](./.github/workflows/reusable-docker-ghcr.yml)
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
@@ -116,8 +157,8 @@ jobs:
   call-flake8-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@main
     with:
-      local_package_namkes: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
-      excludes: hyp3_plugin/ugly.py      # Optional; comma-separated list of glob patterns to exclude from checks
+      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
+      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
 ```
 
 to ensure the Python code is styled correctly.
