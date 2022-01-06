@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        python_version: ${{ fromJson(inputs.python_version) }}
+        python_version: ${{ fromJson(inputs.python_versions) }}
 
     steps:
       - uses: actions/checkout@v2
