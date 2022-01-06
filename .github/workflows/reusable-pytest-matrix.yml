@@ -1,0 +1,39 @@
+on:
+  workflow_call:
+    inputs:
+      conda_env_name:
+        required: true
+        type: string
+      local_package_name:
+        required: true
+        type: string
+      python_versions:
+        required: false
+        default: >-
+          ["3.8", "3.9", "3.10"]
+        description: JSON string containing the list of python versions to test
+        type: string
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python_version: ${{ fromJson(inputs.python_version) }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          python-version: ${{ matrix.python_version }}
+          activate-environment: ${{ inputs.conda_env_name }}
+          environment-file: environment.yml
+
+      - name: Pytest in conda environment
+        shell: bash -l {0}
+        run: |
+          python -m pip install .[develop]
+          pytest --cov=${{ inputs.local_page_name }}
