@@ -31,6 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Dump Context
+        shell: bash -l {0}
+        run: |
+          echo '${{ toJSON(github) }}'
+          echo '${{ github.ref }}'
+
       - name: set environment variables
         shell: bash -l {0}
         run: |
