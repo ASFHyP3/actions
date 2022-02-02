@@ -58,14 +58,14 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Add test tag
-        if: github.ref == 'refs/heads/${{ inputs.develop_branch }}'
+        if: github.ref == format('refs/heads/{0}', inputs.develop_branch)
         uses: akhilerm/tag-push-action@v1.0.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           dst: ghcr.io/${{ env.REPO }}:test
 
       - name: Add latest tag
-        if: github.ref == 'refs/heads/${{ inputs.release_branch }}'
+        if: github.ref == format('refs/heads/{0}', inputs.release_branch)
         uses: akhilerm/tag-push-action@v1.0.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
