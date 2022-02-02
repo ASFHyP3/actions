@@ -31,11 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Dump Context
-        run: |
-          echo '${{ toJSON(github) }}'
-          echo '${{ github.ref }}'
-
       - name: set environment variables
         run: |
           echo "CI_JOB_TIMESTAMP=$(date --utc --rfc-3339=seconds)" >> $GITHUB_ENV
