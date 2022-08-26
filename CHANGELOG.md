@@ -7,6 +7,12 @@ and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/)
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.4.0](https://github.com/ASFHyP3/actions/compare/v0.3.0...v0.4.0)
+
+### Added
+* [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml) workflow to
+  output the human-readable git object name
+
 ## [0.3.0](https://github.com/ASFHyP3/actions/compare/v0.2.0...v0.3.0)
 
 ### Fixed
