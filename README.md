@@ -68,7 +68,7 @@ to ensure the changelog has been updated for any PR to `develop` or `main`.
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag, and is best paired with either the `reusable-version-info.yml` workflow or the `reusable-git-object-name.yml` workflow. This workflow will
 additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
 Use like:
 
@@ -109,7 +109,7 @@ jobs:
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow or the `reusable-git-object-name.yml` workflow. This workflow will
 additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
 Use like:
 
@@ -143,6 +143,37 @@ jobs:
     secrets:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
+
+### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
+
+Outputs the human-readable git object name from [`git describe`](https://git-scm.com/docs/git-describe) 
+of the calling repository. Use like:
+
+```yaml
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-git-object-name-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@main
+  
+  echo-git-object-name-outputs:
+    needs: call-git-object-name-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
+```
+and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
 
