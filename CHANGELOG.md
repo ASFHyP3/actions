@@ -7,6 +7,18 @@ and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/)
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.3.0](https://github.com/ASFHyP3/actions/compare/v0.2.0...v0.3.0)
+
+### Fixed
+* [`reusable-docker-ecr.yml`](./.github/workflows/reusable-docker-ecr.yml) workflow now ensures
+  docker image names are all lower case
+
+### Removed
+* Depreciated truffleHog action; use the [`reusable-secrets-analysis.yml`](.github/workflows/reusable-secrets-analysis.yml)
+  workflow instead
+* Depreciated bump-version action; use the [`reusable-bump-version.yml`](.github/workflows/reusable-bump-version.yml)
+  workflow instead
+
 ## [0.2.0](https://github.com/ASFHyP3/actions/compare/v0.1.0...v0.2.0)
 
 ### Added
