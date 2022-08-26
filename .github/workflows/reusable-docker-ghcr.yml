@@ -43,7 +43,7 @@ jobs:
           username: ${{ inputs.user }}
           password: ${{ secrets.USER_TOKEN }}
 
-      - name: Lowercase repo for Github Container Registry
+      - name: Lowercase repo for container registry
         run: |
           echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
 
