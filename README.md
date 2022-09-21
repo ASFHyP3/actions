@@ -277,9 +277,8 @@ to create a release for every newly pushed version tag.
 
 ### [`reusable-secrets-analysis.yml`](./.github/workflows/reusable-secrets-analysis.yml)
 
-Scan a PR for potentially committed secrets using [git-leaks](https://github.com/zricethezav/gitleaks)
-and [truffleHog](https://github.com/trufflesecurity/truffleHog). Requires these files at the root of the calling repository:
-  * [`.gitleaks.toml`](./.gitleaks.toml)
+Scan a PR for potentially committed secrets using [truffleHog](https://github.com/trufflesecurity/truffleHog).
+Requires this file at the root of the calling repository:
   * [`.trufflehot.txt`](./.trufflehog.txt)
 
 Use like:
