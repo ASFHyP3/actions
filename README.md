@@ -243,7 +243,7 @@ jobs:
       conda_env_name: hyp3-plugin      # Required; conda environment name to activate
       # Optional; default shown
       python_version: >-
-        ["3.8", "3.9", "3.10"]          
+        ["3.8", "3.9", "3.10"]
 ```
 
 to test your Python package and produce a coverage report for. Importantly, `python_version` *must* be a valid JSON string
