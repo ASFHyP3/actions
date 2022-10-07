@@ -7,6 +7,11 @@ and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/)
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.5.0]
+
+### Added
+* [`reusable-relese-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) reusable workflow to
+  add a comment to PRs with a release checklist for developers and reviewers
+
 ### Removed
 * Removed support for secret scanning with `gitleaks-action`, which now requires a paid license to use the latest version.
 

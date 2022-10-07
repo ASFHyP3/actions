@@ -275,6 +275,34 @@ jobs:
 ```
 to create a release for every newly pushed version tag.
 
+### [`reusable-relese-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) 
+
+Add a comment to PRs when they are opened with a release checklist for developers and reviewers.
+
+Use like:
+
+```yaml
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+  
+jobs:
+  call-release-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@main
+    with:
+      # optional; example shown
+      additional_developer_items: '- [ ] If the step function code has changed, have you drained the job queue before merging?'
+      # optional; example shown
+      additional_reviewer_items: '- [ ] Are there any risks associated with this release?'
+    secrets:
+      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+to add a comment to PRs when they are opened to the `main` branch.
+
+
 ### [`reusable-secrets-analysis.yml`](./.github/workflows/reusable-secrets-analysis.yml)
 
 Scan a PR for potentially committed secrets using [truffleHog](https://github.com/trufflesecurity/truffleHog).
