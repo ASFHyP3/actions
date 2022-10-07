@@ -15,7 +15,7 @@ on:
 
 
 jobs:
-  add-release-template-comment:
+  add-release-checklist-comment:
     runs-on: ubuntu-latest
     name: Add a comment with the release template
     steps:
