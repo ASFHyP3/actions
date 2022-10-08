@@ -21,7 +21,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   to 
   ```yaml
       # Optional; default shown
-      python_version: >-
+      python_versions: >-
         ["3.8", "3.9", "3.10"]
   ```
   Note: A single python version can be specified like `["3.9"]`.
