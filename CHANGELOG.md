@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0]
+
+### Added
+* [`reusable-relese-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) reusable workflow to
+  add a comment to PRs with a release checklist for developers and reviewers
+
+### Changed
+* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now accepts (only) a JSON list of python version strings
+  and will setup a matrix of test jobs for multiple python versions. `python_version` usage has changed from
+  ```yaml
+    python_version: "3.9"            # Optional; default shown  
+  ```
+  to 
+  ```yaml
+      # Optional; default shown
+      python_versions: >-
+        ["3.8", "3.9", "3.10"]
+  ```
+  Note: A single python version can be specified like `["3.9"]`.
+
+### Removed
+* Removed support for secret scanning with `gitleaks-action`, which now requires a paid license to use the latest version.
 
 ## [0.4.0](https://github.com/ASFHyP3/actions/compare/v0.3.0...v0.4.0)
 
