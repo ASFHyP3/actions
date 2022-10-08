@@ -3,8 +3,8 @@
 A collection of [GitHub Actions](https://docs.github.com/en/actions) and [reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
 that are used across the ASFHyP3 organization. 
 
-**We reccomend pinning versions as these workflow sare designed to facilitate ASF Tools Team development and
-may change as the team evolves.** 
+We reccomend strict version pinning when using these workflows as  they are designed to facilitate ASF Tools Team development and
+will change as the team evolves.
 
 ## Reusable Workflows
 
