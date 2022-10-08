@@ -12,6 +12,20 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 * [`reusable-relese-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) reusable workflow to
   add a comment to PRs with a release checklist for developers and reviewers
 
+### Changed
+* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now accepts (only) a JSON list of python version strings
+  and will setup a matrix of test jobs for multiple python versions. `python_version` usage has changed from
+  ```yaml
+    python_version: "3.9"            # Optional; default shown  
+  ```
+  to 
+  ```yaml
+      # Optional; default shown
+      python_versions: >-
+        ["3.8", "3.9", "3.10"]
+  ```
+  Note: A single python version can be specified like `["3.9"]`.
+
 ### Removed
 * Removed support for secret scanning with `gitleaks-action`, which now requires a paid license to use the latest version.
 

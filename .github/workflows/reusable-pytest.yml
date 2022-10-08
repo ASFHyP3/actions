@@ -7,21 +7,28 @@ on:
       local_package_name:
         required: true
         type: string
-      python_version:
+      python_versions:
         required: false
-        default: '3.9'
+        default: >-
+          ["3.8", "3.9", "3.10"]
+        description: JSON string containing the list of python versions to test
         type: string
 
 jobs:
   pytest:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python_version: ${{ fromJson(inputs.python_versions) }}
+
     steps:
       - uses: actions/checkout@v3
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
           mamba-version: "*"
-          python-version: ${{ inputs.python_version }}
+          python-version: ${{ matrix.python_version }}
           activate-environment: ${{ inputs.conda_env_name }}
           environment-file: environment.yml
 

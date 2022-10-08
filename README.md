@@ -241,10 +241,13 @@ jobs:
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       conda_env_name: hyp3-plugin      # Required; conda environment name to activate
-      python_version: '3.9'            # Optional; default shown
+      # Optional; default shown
+      python_versions: >-
+        ["3.8", "3.9", "3.10"]
 ```
 
-to test your Python package and produce a coverage report for.
+to test your Python package and produce a coverage report for. Importantly, `python_versions` *must* be a valid JSON string
+containing a list of python version strings.
 
 ### [`reusable-release.yml`](./.github/workflows/reusable-release.yml)
 
