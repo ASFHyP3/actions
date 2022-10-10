@@ -3,8 +3,8 @@
 A collection of [GitHub Actions](https://docs.github.com/en/actions) and [reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
 that are used across the ASFHyP3 organization. 
 
-**While these can generally be used broadly, they are designed to facilitate the ASF Tools Team development workflows and
-may change as the team evolved. Therefore, we recommend pinning versions for repos not owned by the Tools Team.** 
+While these workflows are developed to be used broadly, we recommend strict version pinning when using these workflows.
+They are primarily designed to facilitate ASF Tools Team development and will change as the team evolves.
 
 ## Reusable Workflows
 
@@ -360,16 +360,3 @@ jobs:
           echo "version tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}"
 ```
 and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
-
-## Actions (Depreciated)
-
-**WARNING! These actions have been depreciated in favor of their [reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
-equivalents.**
-
-A collection of [composite run](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) 
-GitHub Actions to support ASFHyP3 CI/CD pipelines
-
-* [TruffleHog](trufflehog/README.md) -- look for secrets in the git commit
-  history back to the last tag
-* [Bump Version](bump-version/README.md) -- create a new tag for a repository
-  based on Pull Request labels using bump2version
