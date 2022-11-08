@@ -10,6 +10,8 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.6.0]
 
 ### Changed
+* [`reusable-version-info.yml`](.github/workflows/reusable-version-info.yml) now uses `setuptools_scm`for generating
+  version numbers as the use of `setup.py` [is discouraged](https://setuptools.pypa.io/en/latest/userguide/quickstart.html#setuppy-discouraged)
 * [`reusable-git-object-name.yml`](.github/workflows/reusable-git-object-name.yml) now handles lightweight as well as
   annotated tags
 

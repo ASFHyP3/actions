@@ -327,8 +327,9 @@ to scan every push for secrets.
 
 ### [`reusable-version-info.yml`](./.github/workflows/reusable-version-info.yml)
 
-Outputs the version number of the calling repositories Python package by running `python setup.py --version` from the
-repository root. Requires an `environment.yml` file at the root of the calling repository specifying all the runtime
+Outputs the version number of the calling repositories Python package by running
+[`python -m setuptools_scm`](https://github.com/pypa/setuptools_scm#pyprojecttoml-usage) from the repository root.
+Requires an `environment.yml` file at the root of the calling repository specifying all the runtime
 dependencies needed. This workflow will additionally output a Docker tag compatible version number. Use like:
 
 ```yaml
@@ -350,7 +351,7 @@ jobs:
     with:
       conda_env_name: hyp3-plugin  # Required; conda environment name to activate
       python_version: '3.9'        # Optional; default shown
-  
+
   echo-version-info-outputs:
     needs: call-version-info-workflow
     runs-on: ubuntu-latest
@@ -359,4 +360,4 @@ jobs:
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"
           echo "version tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}"
 ```
-and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
