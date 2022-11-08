@@ -144,9 +144,28 @@ jobs:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
 
+### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
+
+Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
+
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-flake8-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.4.0
+    with:
+      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
+      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
+```
+
+to ensure the Python code is styled correctly.
+
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
-Outputs the human-readable git object name from [`git describe`](https://git-scm.com/docs/git-describe) 
+Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
 of the calling repository. Use like:
 
 ```yaml
@@ -173,26 +192,7 @@ jobs:
       - run: |
           echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
 ```
-and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
-
-### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
-
-Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
-
-```yaml
-name: Static analysis
-
-on: push
-
-jobs:
-  call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.4.0
-    with:
-      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
-      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
-```
-
-to ensure the Python code is styled correctly.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
