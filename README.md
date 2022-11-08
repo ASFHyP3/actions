@@ -3,8 +3,8 @@
 A collection of [GitHub Actions](https://docs.github.com/en/actions) and [reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
 that are used across the ASFHyP3 organization. 
 
-**While these can generally be used broadly, they are designed to facilitate the ASF Tools Team development workflows and
-may change as the team evolved. Therefore, we recommend pinning versions for repos not owned by the Tools Team.** 
+While these workflows are developed to be used broadly, we recommend strict version pinning when using these workflows.
+They are primarily designed to facilitate ASF Tools Team development and will change as the team evolves.
 
 ## Reusable Workflows
 
@@ -25,7 +25,7 @@ on:
 
 jobs:
   call-bump-version-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.6.0
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -57,7 +57,7 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.6.0
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -87,13 +87,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.6.0
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.6.0
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -128,13 +128,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.6.0
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.6.0
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       release_branch: main     # Optional; default shown
@@ -144,9 +144,28 @@ jobs:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
 
+### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
+
+Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
+
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-flake8-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.6.0
+    with:
+      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
+      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
+```
+
+to ensure the Python code is styled correctly.
+
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
-Outputs the human-readable git object name from [`git describe`](https://git-scm.com/docs/git-describe) 
+Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
 of the calling repository. Use like:
 
 ```yaml
@@ -164,7 +183,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.6.0
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
@@ -173,26 +192,7 @@ jobs:
       - run: |
           echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
 ```
-and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
-
-### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
-
-Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
-
-```yaml
-name: Static analysis
-
-on: push
-
-jobs:
-  call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.4.0
-    with:
-      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
-      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
-```
-
-to ensure the Python code is styled correctly.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
@@ -213,7 +213,7 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.6.0
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -237,7 +237,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.6.0
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       conda_env_name: hyp3-plugin      # Required; conda environment name to activate
@@ -267,7 +267,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.6.0
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -294,7 +294,7 @@ on:
   
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.6.0
     with:
       # optional; example shown
       additional_developer_items: '- [ ] If the step function code has changed, have you drained the job queue before merging?'
@@ -321,14 +321,15 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.6.0
 ```
 to scan every push for secrets.
 
 ### [`reusable-version-info.yml`](./.github/workflows/reusable-version-info.yml)
 
-Outputs the version number of the calling repositories Python package by running `python setup.py --version` from the
-repository root. Requires an `environment.yml` file at the root of the calling repository specifying all the runtime
+Outputs the version number of the calling repositories Python package by running
+[`python -m setuptools_scm`](https://github.com/pypa/setuptools_scm#pyprojecttoml-usage) from the repository root.
+Requires an `environment.yml` file at the root of the calling repository specifying all the runtime
 dependencies needed. This workflow will additionally output a Docker tag compatible version number. Use like:
 
 ```yaml
@@ -346,11 +347,11 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.4.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.6.0
     with:
       conda_env_name: hyp3-plugin  # Required; conda environment name to activate
       python_version: '3.9'        # Optional; default shown
-  
+
   echo-version-info-outputs:
     needs: call-version-info-workflow
     runs-on: ubuntu-latest
@@ -359,17 +360,4 @@ jobs:
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"
           echo "version tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}"
 ```
-and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
-
-## Actions (Depreciated)
-
-**WARNING! These actions have been depreciated in favor of their [reusable workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
-equivalents.**
-
-A collection of [composite run](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) 
-GitHub Actions to support ASFHyP3 CI/CD pipelines
-
-* [TruffleHog](trufflehog/README.md) -- look for secrets in the git commit
-  history back to the last tag
-* [Bump Version](bump-version/README.md) -- create a new tag for a repository
-  based on Pull Request labels using bump2version
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.

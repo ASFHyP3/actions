@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.6.0]
+
+### Changed
+* [`reusable-version-info.yml`](.github/workflows/reusable-version-info.yml) now uses `setuptools_scm`for generating
+  version numbers as the use of `setup.py` [is discouraged](https://setuptools.pypa.io/en/latest/userguide/quickstart.html#setuppy-discouraged)
+* [`reusable-git-object-name.yml`](.github/workflows/reusable-git-object-name.yml) now handles lightweight as well as
+  annotated tags
+
+### Fixed
+* All uses of the GitHub Action `set-output` command have been upgraded, due to
+  forthcoming [depreciation](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)
+
 ## [0.5.0]
 
 ### Added

@@ -30,7 +30,6 @@ jobs:
 
       - name: set environment variables
         run: |
-          git fetch origin +refs/tags/*:refs/tags/*
           echo "CI_JOB_TIMESTAMP=$(date --utc --rfc-3339=seconds)" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
