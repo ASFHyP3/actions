@@ -16,6 +16,11 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 * [`reusable-git-object-name.yml`](.github/workflows/reusable-git-object-name.yml) now handles lightweight as well as 
   annotated tags
 
+### Fixed
+* All uses of the GitHub Action `set-output` command have been upgraded, due to 
+  forthcoming [depreciation](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)
+
+
 ## [0.5.0]
 
 ### Added
