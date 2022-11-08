@@ -19,6 +19,5 @@ jobs:
         id: set_outputs
         shell: bash -l {0}
         run: |
-          git fetch origin +refs/tags/*:refs/tags/*
-          export SDIST_VERSION=$(git describe)
+          export SDIST_VERSION=$(git describe --dirty --tags --long --match "*[0-9]*")
           echo "name=${SDIST_VERSION}" >> $GITHUB_OUTPUT
