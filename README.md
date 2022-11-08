@@ -146,7 +146,7 @@ jobs:
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
-Outputs the human-readable git object name from [`git describe`](https://git-scm.com/docs/git-describe) 
+Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
 of the calling repository. Use like:
 
 ```yaml
@@ -173,7 +173,7 @@ jobs:
       - run: |
           echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
 ```
-and is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
 
