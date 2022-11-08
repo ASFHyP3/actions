@@ -38,7 +38,6 @@ jobs:
         id: set_outputs
         shell: bash -l {0}
         run: |
-          git fetch origin +refs/tags/*:refs/tags/*
           export SDIST_VERSION=$(python setup.py --version)
           echo "::set-output name=version::${SDIST_VERSION}"
           echo "::set-output name=version_tag::${SDIST_VERSION/+/_}"
