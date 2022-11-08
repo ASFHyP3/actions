@@ -8,6 +8,11 @@ on:
         required: false
         default: '3.9'
         type: string
+      method:
+        description: 'The method used to generate the version number. Can be one of: `setup.py`, `setuptools_scm`, or `git`'
+        required: false
+        default: 'setup.py'
+        type: string
     outputs:
       version:
         value: ${{ jobs.version_info.outputs.version }}
@@ -28,6 +33,7 @@ jobs:
           fetch-depth: 0
 
       - uses: conda-incubator/setup-miniconda@v2
+        if: inputs.method != 'git'
         with:
           mamba-version: "*"
           python-version: ${{ inputs.python_version }}
@@ -38,7 +44,13 @@ jobs:
         id: set_outputs
         shell: bash -l {0}
         run: |
-          git fetch origin +refs/tags/*:refs/tags/*
-          export SDIST_VERSION=$(python setup.py --version)
+          if [ "${{ inputs.method }}" == "setup.py" ]; then
+            export SDIST_VERSION=$(python setup.py --version)
+          elif [ "${{ inputs.method }}" == "setuptools_scm" ]; then
+            export SDIST_VERSION=$(python -m setuptools_scm)
+          elif [ "${{ inputs.method }}" == "git" ]; then
+            export SDIST_VERSION=$(git describe --dirty --tags --long --match "*[0-9]*")
+          fi
+          echo "Version number: ${SDIST_VERSION}"
           echo "::set-output name=version::${SDIST_VERSION}"
           echo "::set-output name=version_tag::${SDIST_VERSION/+/_}"
