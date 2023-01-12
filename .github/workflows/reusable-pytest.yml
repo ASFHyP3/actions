@@ -1,9 +1,6 @@
 on:
   workflow_call:
     inputs:
-      conda_env_name:
-        required: true
-        type: string
       local_package_name:
         required: true
         type: string
@@ -25,12 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: mamba-org/provision-with-micromamba@v14
         with:
-          mamba-version: "*"
-          python-version: ${{ matrix.python_version }}
-          activate-environment: ${{ inputs.conda_env_name }}
-          environment-file: environment.yml
+          extra-specs: |
+            python=${{ matrix.python_version }}
 
       - name: Pytest in conda environment
         shell: bash -l {0}
