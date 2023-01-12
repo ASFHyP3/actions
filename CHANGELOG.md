@@ -11,6 +11,8 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 * `conda` environments are now provisioned with micromamba in all reusable workflows
+* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) and [`reusable-pytest.yml`](.github/workflows/reusable-version-info.yml)
+  no longer accept a `conda_env_name` input and will use the environment named in the calling repo's `environment.yml`
 
 ## [0.6.0]
 
