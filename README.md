@@ -240,7 +240,6 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.6.0
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
-      conda_env_name: hyp3-plugin      # Required; conda environment name to activate
       # Optional; default shown
       python_versions: >-
         ["3.8", "3.9", "3.10"]
@@ -349,7 +348,6 @@ jobs:
   call-version-info-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.6.0
     with:
-      conda_env_name: hyp3-plugin  # Required; conda environment name to activate
       python_version: '3.9'        # Optional; default shown
 
   echo-version-info-outputs:
