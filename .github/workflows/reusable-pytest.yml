@@ -23,8 +23,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: mamba-org/provision-with-micromamba@v14
-        extra-specs: |
-          python=${{ matrix.python_version }}
+        with:
+          extra-specs: |
+            python=${{ matrix.python_version }}
 
       - name: Pytest in conda environment
         shell: bash -l {0}
