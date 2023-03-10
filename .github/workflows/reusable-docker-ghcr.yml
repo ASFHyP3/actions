@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: true
+          push: ! github.event.pull_request.head.repo.fork
           tags: |
             ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           labels: |
