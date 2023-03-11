@@ -25,8 +25,7 @@ on:
 
 jobs:
   call-bump-version-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.7.0
-    with:
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.7.1
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
     secrets:
@@ -57,7 +56,7 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.7.1
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -87,13 +86,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.7.1
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -128,13 +127,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.7.1
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       release_branch: main     # Optional; default shown
@@ -155,7 +154,7 @@ on: push
 
 jobs:
   call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.7.1
     with:
       local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
       excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
@@ -183,7 +182,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.7.1
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
@@ -213,7 +212,7 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.7.1
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -237,7 +236,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.7.1
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       # Optional; default shown
@@ -266,7 +265,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.7.1
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -293,7 +292,7 @@ on:
   
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.7.1
     with:
       # optional; example shown
       additional_developer_items: '- [ ] If the step function code has changed, have you drained the job queue before merging?'
@@ -320,7 +319,7 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.7.1
 ```
 to scan every push for secrets.
 
@@ -346,7 +345,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
     with:
       python_version: '3.9'        # Optional; default shown
 
