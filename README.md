@@ -136,11 +136,12 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.7.1
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
+      user: ${{ github.actor }}
       release_branch: main     # Optional; default shown
       develop_branch: develop  # Optional; default shown
-      user: tools-bot          # Optional; default shown
+
     secrets:
-      USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
+      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
