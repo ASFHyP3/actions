@@ -284,6 +284,8 @@ Add a comment to PRs when they are opened with a release checklist for developer
 Use like:
 
 ```yaml
+name: Create Release Comment
+
 on:
   pull_request:
     types:
@@ -294,6 +296,8 @@ on:
 jobs:
   call-release-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.7.0
+    permissions:
+      pull-requests: write
     with:
       # optional; example shown
       additional_developer_items: '- [ ] If the step function code has changed, have you drained the job queue before merging?'
