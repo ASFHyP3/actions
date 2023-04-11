@@ -277,7 +277,7 @@ jobs:
 ```
 to create a release for every newly pushed version tag.
 
-### [`reusable-relese-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) 
+### [`reusable-release-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) 
 
 Add a comment to PRs when they are opened with a release checklist for developers and reviewers.
 
@@ -295,7 +295,7 @@ on:
   
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-relese-checklist-comment.yml@v0.7.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.7.0
     permissions:
       pull-requests: write
     with:
