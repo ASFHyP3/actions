@@ -26,6 +26,7 @@ on:
 jobs:
   call-bump-version-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.7.1
+    with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
     secrets:
