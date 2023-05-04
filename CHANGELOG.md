@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.8.0]
+
+### Added
+* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now inlcudes a `fail_fast` option which lets you specify 
+  [the strategy for handling failures](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast)
+
 ## [0.7.1]
 
 ### Fixed
