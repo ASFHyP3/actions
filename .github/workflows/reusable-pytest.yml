@@ -10,12 +10,18 @@ on:
           ["3.8", "3.9", "3.10"]
         description: JSON string containing the list of python versions to test
         type: string
+      fail_fast:
+        required: false
+        default: true
+        description: Cancell all in-progress and queued pytest jobs if any job in the matrix fails
+        type: boolean
 
 jobs:
   pytest:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: ${{ inputs.fail_fast }}
       matrix:
         python_version: ${{ fromJson(inputs.python_versions) }}
 
