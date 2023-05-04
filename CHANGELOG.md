@@ -10,7 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.8.0]
 
 ### Added
-* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now inlcudes a `fail_fast` option which lets you specify 
+* [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now includes a `fail_fast` option which lets you specify 
   [the strategy for handling failures](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast)
 
 ## [0.7.1]
