@@ -294,7 +294,7 @@ on:
       - main
   
 jobs:
-  call-release-workflow:
+  call-release-checklist-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.7.1
     permissions:
       pull-requests: write
