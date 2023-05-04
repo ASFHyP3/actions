@@ -13,7 +13,7 @@ on:
       fail_fast:
         required: false
         default: true
-        description: Cancell all in-progress and queued pytest jobs if any job in the matrix fails
+        description: Cancel all in-progress and queued pytest jobs if any job in the matrix fails
         type: boolean
 
 jobs:
