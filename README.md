@@ -240,8 +240,8 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.7.1
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
-      # Optional; default shown
-      python_versions: >-
+      fail_fast: false      # Optional; default shown
+      python_versions: >-  # Optional; default shown
         ["3.8", "3.9", "3.10"]
 ```
 
