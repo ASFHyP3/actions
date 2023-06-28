@@ -1,0 +1,46 @@
+on:
+  workflow_call:
+    secrets:
+      JIRA_BASE_URL:
+        required: true
+      JIRA_USER_EMAIL:
+        required: true
+      JIRA_API_TOKEN:
+        required: true
+      JIRA_PROJECT:
+        required: true
+
+jobs:
+  create-jira-issue:
+    if: ${{ startsWith(github.event.label.name, 'Jira') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Jira issue type
+        id: get_jira_issue_type
+        run: |
+          type=$(echo '${{ github.event.label.name }}' | cut -d' ' -f2)
+          echo "type=$type" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Jira
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      - name: Create Jira issue
+        id: create_jira_issue
+        uses: atlassian/gajira-create@v3
+        with:
+          project: ${{ secrets.JIRA_PROJECT }}
+          issuetype: ${{ steps.get_jira_issue_type.outputs.type }}
+          summary: ${{ github.event.issue.title }}
+          description: ${{ github.event.issue.html_url }}
+
+      - name: Add Jira issue key to GitHub issue body
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: update-issue
+          body: "**Jira:** ${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create_jira_issue.outputs.issue }}\n\
+            <!-- The previous line was added by GitHub Actions. It should remain as the first line in this description. -->\n\n\
+            ${{ github.event.issue.body }}"
