@@ -90,10 +90,10 @@ The `JIRA_FIELDS` secret stores additional fields in JSON format. For example, t
 sprint, supply the following value:
 
 ```json
-{"customfield_XXXXX": YY}
+{"customfield_XXXXX": 42}
 ```
 
-where `customfield_XXXXX` is the custom field name of the sprint field and `YY` is the ID of the particular sprint.
+where `customfield_XXXXX` is the custom field name of the sprint field and `42` is the ID of the particular sprint.
 
 It would seem that the custom field name of the sprint field is not the same across all Jira deployments and projects.
 Therefore, to determine both the custom field name and the sprint ID, do the following:
@@ -104,7 +104,7 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 2. Search the JSON response for the name of the sprint. You should find something like the following
    (there will be other fields such as `boardId` present in the object, but they are not shown below):
    ```json
-   "customfield_XXXXX":[{"id":YY,"name":"MySprint"}]
+   "customfield_XXXXX":[{"id":42,"name":"MySprint"}]
    ```
 
 ### [`reusable-docker-ecr.yml`](./.github/workflows/reusable-docker-ecr.yml)
