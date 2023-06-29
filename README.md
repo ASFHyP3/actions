@@ -25,7 +25,7 @@ on:
 
 jobs:
   call-bump-version-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.8.0
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -57,12 +57,55 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.8.0
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
+
+### [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml)
+
+Creates a Jira issue that corresponds to the labeled GitHub issue. Use like:
+
+```yaml
+name: Create Jira issue
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  call-create-jira-issue-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.8.0
+    secrets:
+      JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+      JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
+      JIRA_FIELDS: ${{ secrets.JIRA_FIELDS }}
+```
+
+The `JIRA_FIELDS` secret stores additional fields in JSON format. For example, to assign the issue to a particular
+sprint, supply the following value:
+
+```json
+{"customfield_XXXXX": 42}
+```
+
+where `customfield_XXXXX` is the custom field name of the sprint field and `42` is the ID of the particular sprint.
+
+It would seem that the custom field name of the sprint field is not the same across all Jira deployments and projects.
+Therefore, to determine both the custom field name and the sprint ID, do the following:
+
+1. Choose any issue that belongs to the particular sprint and run the `curl` command for the Jira API's
+   [Get issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get)
+   endpoint, supplying the issue key.
+2. Search the JSON response for the name of the sprint. You should find something like the following
+   (there will be other fields such as `boardId` present in the object, but they are not shown below):
+   ```json
+   "customfield_XXXXX":[{"id":42,"name":"MySprint"}]
+   ```
 
 ### [`reusable-docker-ecr.yml`](./.github/workflows/reusable-docker-ecr.yml)
 
@@ -87,13 +130,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.8.0
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.8.0
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -128,13 +171,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.8.0
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.8.0
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
@@ -155,7 +198,7 @@ on: push
 
 jobs:
   call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.8.0
     with:
       local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
       excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
@@ -183,7 +226,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.8.0
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
@@ -213,7 +256,7 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.8.0
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -237,7 +280,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.8.0
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
@@ -266,7 +309,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.8.0
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -295,7 +338,7 @@ on:
   
 jobs:
   call-release-checklist-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.8.0
     permissions:
       pull-requests: write
     with:
@@ -324,7 +367,7 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.8.0
 ```
 to scan every push for secrets.
 
@@ -350,7 +393,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.7.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.8.0
     with:
       python_version: '3.9'        # Optional; default shown
 
