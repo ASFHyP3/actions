@@ -83,7 +83,29 @@ jobs:
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
       JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
       JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
+      JIRA_FIELDS: ${{ secrets.JIRA_FIELDS }}
 ```
+
+The `JIRA_FIELDS` secret stores additional fields in JSON format. For example, to assign the issue to a particular
+sprint, supply the following value:
+
+```json
+{"customfield_XXXXX": YY}
+```
+
+where `customfield_XXXXX` is the custom field name of the sprint field and `YY` is the ID of the particular sprint.
+
+It would seem that the custom field name of the sprint field is not the same across all Jira deployments and projects.
+Therefore, to determine both the custom field name and the sprint ID, do the following:
+
+1. Choose any issue that belongs to the particular sprint and run the `curl` command for the Jira API's
+   [Get issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get)
+   endpoint, supplying the issue key.
+2. Search the JSON response for the name of the sprint. You should find something like the following
+   (there will be other fields such as `boardId` present in the object, but they are not shown below):
+   ```json
+   "customfield_XXXXX":[{"id":YY,"name":"MySprint"}]
+   ```
 
 ### [`reusable-docker-ecr.yml`](./.github/workflows/reusable-docker-ecr.yml)
 

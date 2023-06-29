@@ -9,6 +9,8 @@ on:
         required: true
       JIRA_PROJECT:
         required: true
+      JIRA_FIELDS:
+        required: true
 
 jobs:
   create-jira-issue:
@@ -36,6 +38,7 @@ jobs:
           issuetype: ${{ steps.get_jira_issue_type.outputs.type }}
           summary: ${{ github.event.issue.title }}
           description: ${{ github.event.issue.html_url }}
+          fields: '${{ secrets.JIRA_FIELDS }}'
 
       - name: Add Jira issue key to GitHub issue body
         uses: actions-cool/issues-helper@v3
