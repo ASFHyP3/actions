@@ -44,6 +44,9 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: update-issue
-          body: "**Jira:** ${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create_jira_issue.outputs.issue }}\n\
-            <!-- The previous line was added by GitHub Actions. It should remain as the first line in this description. -->\n\n\
+          body: "<!-- WARNING: The following lines were added by create-jira-issue, please do not modify! -->\n\
+            **Jira:** ${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create_jira_issue.outputs.issue }}\n\n\
+            *Note: The above link is accessible only to members of ASF.*\n\n\
+            ----------------------------------------------------------------------------------------------------\n\
+            <!-- WARNING: The preceding lines were added by create-jira-issue, please do not modify! -->\n\n\
             ${{ github.event.issue.body }}"
