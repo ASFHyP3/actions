@@ -184,8 +184,13 @@ jobs:
       release_branch: main     # Optional; default shown
       develop_branch: develop  # Optional; default shown
     secrets:
-      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
+
+If you're using this workflow outside of the https://github.com/ASFHyP3 organization,
+you should replace `TOOLS_BOT_PAK` with the name of a secret that stores a
+[personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+with the appropriate permissions.
 
 ### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
 
