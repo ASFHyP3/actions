@@ -23,9 +23,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: mamba-org/provision-with-micromamba@v16
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          extra-specs: |
+          environment-file: environment.yml
+          create-args: >-
             python=${{ inputs.python_version }}
 
       - name: set outputs
