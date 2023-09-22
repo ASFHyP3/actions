@@ -7,9 +7,22 @@ and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/)
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.8.2]
+
+### Changed
+* `reusable-pytest` and `reusable-version-info` now use [`setup-micromamba`](https://github.com/mamba-org/setup-micromamba) rather than `provision-with-micromamba` which has been deprecated.
+
+## [0.8.1]
+
+### Added
+* Modified [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml) to add
+  a disclaimer for the Jira issue link.
+
 ## [0.8.0]
 
 ### Added
+* Added [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml) for creating a Jira
+  issue that corresponds to the labeled GitHub issue.
 * [`reusable-pytest.yml`](.github/workflows/reusable-pytest.yml) now includes a `fail_fast` option which lets you specify 
   [the strategy for handling failures](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast)
 
