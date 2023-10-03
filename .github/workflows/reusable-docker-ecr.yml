@@ -47,7 +47,7 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
 
       - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Lowercase repo for container registry
         run: |
