@@ -285,7 +285,7 @@ jobs:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
       python_versions: >-  # Optional; default shown
-        ["3.8", "3.9", "3.10", "3.12"]
+        ["3.9", "3.10", "3.11", "3.12"]
 ```
 
 to test your Python package and produce a coverage report for. Importantly, `python_versions` *must* be a valid JSON string
