@@ -10,7 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.8.3]
 
 ### Added 
-- `reusable-pytest` now includes testing for Python 3.12
+- `reusable-pytest` now tests Python 3.9--3.12 by default.
 
 ## [0.8.2]
 
