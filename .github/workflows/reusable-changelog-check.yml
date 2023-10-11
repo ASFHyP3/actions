@@ -5,10 +5,10 @@ on:
         required: true
 
 jobs:
-  changelog-udated:
+  changelog-updated:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Changelog check
         uses: Zomzog/changelog-checker@v1.3.0
