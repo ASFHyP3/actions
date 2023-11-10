@@ -232,9 +232,26 @@ src = ["src", "tests"]
 indent-style = "space"
 quote-style = "single"
 
+[tool.ruff.lint]
+extend-select = [
+    "UP",  # pyupgrade
+    "D",   # pydocstyle
+    "ANN", # annotations
+    "PTH", # use-pathlib-pth
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.ruff.lint.isort]
 case-sensitive = true
 lines-after-imports = 2
+```
+
+Ruff can automatically fix many linting errors and reformat code to match your Python style by running these  commands:
+```shell
+ruff check --fix .
+ruff format .
 ```
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
