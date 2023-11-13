@@ -20,8 +20,5 @@ jobs:
       - name: Ruff linting check
         run: ruff check --output-format=github .
 
-      - name: Ruff imports check
-        run: ruff check --select I --output-format=github .
-
       - name: Ruff format check
         run: ruff format --diff .
