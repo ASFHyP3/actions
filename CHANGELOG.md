@@ -9,7 +9,8 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.8.4]
 
 ### Added 
-- `reusable-ruff` workflow for perform linting and static analysis with [Ruff](https://github.com/astral-sh/ruff).
+- [`reusable-ruff`](.github/workflows/reusable-ruff.yml) reusable workflow for perform linting and static analysis with [Ruff](https://github.com/astral-sh/ruff).
+- [`update-examples`](.github/workflows/update-examples.yml) workflow to keep the pinned version number in the README examples up to date
 
 ## [0.8.3]
 
