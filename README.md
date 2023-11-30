@@ -234,10 +234,11 @@ quote-style = "single"
 
 [tool.ruff.lint]
 extend-select = [
-    "UP",  # pyupgrade
-    "D",   # pydocstyle
-    "ANN", # annotations
-    "PTH", # use-pathlib-pth
+    "I",   # isort: https://docs.astral.sh/ruff/rules/#isort-i
+    "UP",  # pyupgrade: https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "D",   # pydocstyle: https://docs.astral.sh/ruff/rules/#pydocstyle-d
+    "ANN", # annotations: https://docs.astral.sh/ruff/rules/#flake8-annotations-ann
+    "PTH", # use-pathlib-pth: https://docs.astral.sh/ruff/rules/#flake8-use-pathlib-pth
 ]
 
 [tool.ruff.lint.pydocstyle]
