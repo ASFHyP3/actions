@@ -1,0 +1,50 @@
+name: Update Actions Examples
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  call-git-object-name-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.8.4
+
+  upate_actions_examples:
+    needs: call-git-object-name-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TOOLS_BOT_PAK }}
+
+      - name: Create update branch
+        id: update
+        env:
+          ACTIONS_VERSION: ${{ needs.call-git-object-name-workflow.outputs.name }}
+          UPDATE_BRANCH: update-examples-to-${{ needs.call-git-object-name-workflow.outputs.name }}
+        run: |
+          git config user.name "tools-bot"
+          git config user.email "UAF-asf-apd@alaska.edu"
+          
+          echo "::set-output name=branch::${UPDATE_BRANCH}"
+          git checkout -b ${UPDATE_BRANCH}
+          
+          export SEARCH_PATTERN='(ASFHyP3/actions/.github/workflows/.*.yml)@v[0-9]+\.[0-9]+\.[0-9]+'
+          sed -i -r "s|$SEARCH_PATTERN|\1@${ACTIONS_VERSION}|g" README.md
+          
+          git commit -am "Bump actions example's version to ${ACTIONS_VERSION}"
+          git push origin ${UPDATE_BRANCH}
+
+      - name: open PR
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch:  ${{ steps.update.outputs.branch }}
+          destination_branch: develop
+          pr_title: Update Actions example versions to ${{ needs.call-git-object-name-workflow.outputs.name }}
+          pr_body: |
+            PR created by a new `v*` tag push event
+          pr_assignee: ASFHyP3/tools
+          pr_label: tools-bot
+          pr_draft: false
+          pr_allow_empty: true
+          github_token: ${{ secrets.TOOLS_BOT_PAK }}
