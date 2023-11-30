@@ -1,13 +1,19 @@
 name: Update Actions Examples
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to set all examples too'
+        required: true
+        type: string
   push:
     tags:
       - v*
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.8.4
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.9.0
 
   upate_actions_examples:
     needs: call-git-object-name-workflow
