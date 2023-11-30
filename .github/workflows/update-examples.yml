@@ -51,7 +51,7 @@ jobs:
 
       - name: Open PR
         env:
-          PR_TITLE: Update Actions example versions to ${{ github.env.ACTIONS_VERSION }}
+          PR_TITLE: Update Actions example versions to ${{ env.ACTIONS_VERSION }}
           PR_BODY: PR created by a new `v*` tag push event
           GH_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
         run: |
