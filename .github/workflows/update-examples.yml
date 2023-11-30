@@ -53,5 +53,6 @@ jobs:
         env:
           PR_TITLE: Update Actions example versions to ${{ github.env.ACTIONS_VERSION }}
           PR_BODY: PR created by a new `v*` tag push event
+          GH_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
         run: |
           gh pr create -t "${PR_TITLE}" -b "${PR_BODY}" -l tools-bot -l bumpless -B develop
