@@ -98,7 +98,7 @@ jobs:
           TAG_MSG=$(jq --raw-output "${PR_TITLE_QUERY}" <<< ${PR_DATA})
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: env.BUMP_PART != 'bumpless'
         with:
           python-version: 3.x
