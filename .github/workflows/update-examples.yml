@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to set all examples too'
+        description: 'Version to set all examples to'
         required: true
         type: string
   push:
