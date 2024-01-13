@@ -35,6 +35,7 @@ jobs:
             - [ ] (If applicable) Updated the dependencies and indicated any downstream changes that are required
             - [ ] Added/updated documentation for these changes
             - [ ] Added/updated tests for these changes
+            - [ ] Verified changes in test deployment and summarized results, e.g. in PR description or comments on the related issue(s)
             ${{ inputs.additional_developer_items }}
 
             ### Reviewer checklist
@@ -44,6 +45,7 @@ jobs:
             - [ ] Are all the changes described appropriately in `CHANGELOG.md`?
             - [ ] Has the documentation been adequately updated?
             - [ ] Are the tests adequate?
+            - [ ] Have the changes been verified in the test deployment?
             ${{ inputs.additional_reviewer_items }}
 
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
