@@ -10,6 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - Added items to the release checklist comment to remind developer to verify changes in test deployment.
+
 ### Changed
 - [`update-examples`](.github/workflows/update-examples.yml) workflow is now triggerable with a `workflow_dispatch` event
 
