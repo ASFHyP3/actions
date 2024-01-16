@@ -13,7 +13,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.9.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.10.0
 
   upate_actions_examples:
     needs: call-git-object-name-workflow
@@ -29,9 +29,9 @@ jobs:
            OBJECT_VERSION: ${{ needs.call-git-object-name-workflow.outputs.name }}
         run: |
           if [[ -z "${INPUT_VERSION}" ]]; then
-            echo "ACTIONS_VERSION=${OBJECT_VERSION}" >> $GITHUB_ENV
+            echo "ACTIONS_VERSION=${OBJECT_VERSION%%-*}" >> $GITHUB_ENV
           else
-            echo "ACTIONS_VERSION=${INPUT_VERSION}" >> $GITHUB_ENV
+            echo "ACTIONS_VERSION=${INPUT_VERSION%%-*}" >> $GITHUB_ENV
           fi
 
       - name: Create update branch

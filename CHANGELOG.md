@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0]
+
+### Fixed
+- [`update-examples`](.github/workflows/update-examples.yml) workflow will now strip distance and hash (longest `-*` match) from the input or calculated version numbers.
+- [`reusable-secrets-analysis.yml`](.github/workflows/reusable-secrets-analysis.yml) now uses the Trufflehog Github Action to scan for only verified secrets, which should reduce or eliminate false positives.
+
+### Removed
+- [`reusable-secrets-analysis.yml`](.github/workflows/reusable-secrets-analysis.yml) no longer recognizes `.trufflehog.txt`, which was previously used to specify exclude paths.
+
 ## [0.10.0]
 
 ### Added
