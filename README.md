@@ -311,8 +311,8 @@ to ensure a release label is included on any PR to `main`.
 
 ### [`reusable-pytest.yml`](./.github/workflows/reusable-pytest.yml)
 
-Runs [pytest](https://docs.pytest.org/en/6.2.x/). Requires an `environment.yml` file at the root of the calling
-repository specifying all the runtime and testing dependencies needed. Use like:
+Runs [pytest](https://docs.pytest.org/en/6.2.x/) and [pytest-cov](https://pypi.org/project/pytest-cov/). Requires an `environment.yml` file at the root of the calling
+repository specifying all the runtime and testing dependencies needed, including `pytest` and `pytest-cov`. Use like:
 
 ```yaml
 name: Test
