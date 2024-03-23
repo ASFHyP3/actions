@@ -404,8 +404,9 @@ to add a comment to PRs when they are opened to the `main` branch.
 ### [`reusable-secrets-analysis.yml`](./.github/workflows/reusable-secrets-analysis.yml)
 
 Scan a PR for potentially committed secrets using [truffleHog](https://github.com/trufflesecurity/truffleHog).
-Requires this file at the root of the calling repository:
-  * [`.trufflehot.txt`](./.trufflehog.txt)
+
+> [!IMPORTANT]
+> This action assumes your stable release branch is named `main`. 
 
 Use like:
 
