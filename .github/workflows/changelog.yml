@@ -11,4 +11,4 @@ on:
       - develop
 jobs:
   call-changelog-check-workflow:
-    uses: ./.github/workflows/reusable-changelog-check.yml
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@changelog-check
