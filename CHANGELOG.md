@@ -10,7 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 - Modified the [`reusable-changelog-check`](.github/workflows/reusable-changelog-check.yml) workflow to remove its dependency on a third-party action. The workflow behavior should remain unchanged except that applying the `bumpless` label now results in the workflow being skipped rather than succeeding. Fixes https://github.com/ASFHyP3/actions/issues/156
-  - When upgrading this reusable action in your repository, you can remove the following lines from the calling workflow:
+  - When upgrading this reusable action in your repository, remove the following lines from the calling workflow:
     ```diff
     -    secrets:
     -      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
