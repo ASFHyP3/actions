@@ -8,5 +8,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Changelog check
-        run: '! git diff --quiet ${{ github.event.pull_request.base.ref }} -- CHANGELOG.md'
+        run: 'git branch -a && ! git diff --quiet ${{ github.event.pull_request.base.ref }} -- CHANGELOG.md'
         shell: bash
