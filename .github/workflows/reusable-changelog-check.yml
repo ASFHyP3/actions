@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Changelog check
-        run: '! git diff --quiet ${{ github.event.pull_request.base.ref }} -- CHANGELOG.md'
+        run: '! git diff --quiet "origin/${{ github.event.pull_request.base.ref }}" -- CHANGELOG.md'
         shell: bash
