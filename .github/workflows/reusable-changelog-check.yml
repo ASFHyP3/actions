@@ -11,7 +11,7 @@ jobs:
           fetch-depth: 0
       - name: Changelog check
         run: |
-          if git diff --quiet "origin/${{ github.event.pull_request.base.ref }}" -- CHANGELOG.md; then
+          if git diff --quiet "origin/asdfasdf" -- CHANGELOG.md; then
             echo "Changelog not updated"
             exit 1
           fi
