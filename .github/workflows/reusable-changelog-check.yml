@@ -8,5 +8,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Changelog check
-        run: ! git diff --quiet CHANGELOG.md
+        run: '! git diff --quiet CHANGELOG.md'
         shell: bash
