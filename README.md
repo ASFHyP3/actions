@@ -58,8 +58,6 @@ on:
 jobs:
   call-changelog-check-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.10.0
-    secrets:
-      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 

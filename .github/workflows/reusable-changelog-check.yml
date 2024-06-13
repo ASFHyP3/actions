@@ -1,19 +1,12 @@
 on:
   workflow_call:
-    secrets:
-      USER_TOKEN:
-        required: true
 
 jobs:
   changelog-updated:
+    if: ${{ ! contains(github.event.pull_request.labels.*.name, 'bumpless') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Changelog check
-        uses: Zomzog/changelog-checker@v1.3.0
-        with:
-          fileName: CHANGELOG.md
-          noChangelogLabel: bumpless
-        env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+        run: ! git diff --quiet CHANGELOG.md
+        shell: bash
