@@ -10,5 +10,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: Changelog check
-        run: '! git diff --quiet ${{ github.event.pull_request.base.ref }} -- CHANGELOG.md'
+        run: '! git diff --quiet origin/${{ github.event.pull_request.base.ref }} -- CHANGELOG.md'
         shell: bash
