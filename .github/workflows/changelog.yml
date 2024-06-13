@@ -11,6 +11,4 @@ on:
       - develop
 jobs:
   call-changelog-check-workflow:
-    # TODO revert pin
-    #uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.11.0
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@changelog-check
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.11.0
