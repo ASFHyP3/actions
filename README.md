@@ -454,7 +454,7 @@ jobs:
   call-version-info-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.11.1
     with:
-      python_version: '3.9'        # Optional; default shown
+      python_version: '3.12'        # Optional; default shown
 
   echo-version-info-outputs:
     needs: call-version-info-workflow
