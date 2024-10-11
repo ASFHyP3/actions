@@ -1,0 +1,19 @@
+name: Notify Downstream of New Release
+
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bump Actions version in HyP3 Cookiecutter
+        uses: benc-uk/workflow-dispatch@v1.2
+        with:
+          workflow: update_actions_version.yml
+          token: ${{ secrets.TOOLS_BOT_PAK }}
+          repo: ASFHyP3/hyp3-cookiecutter
+          ref: develop
+          inputs: '{"version": "${{ github.event.release.tag_name }}"}'
