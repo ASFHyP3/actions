@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./${{ file }}
+          file: ./${{ inputs.file }}
           push: ${{ ! github.event.pull_request.head.repo.fork }}
           tags: |
             ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
