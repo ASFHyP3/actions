@@ -192,6 +192,7 @@ jobs:
       user: ${{ github.actor }}
       release_branch: main     # Optional; default shown
       develop_branch: develop  # Optional; default shown
+      file: Dockerfile # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
