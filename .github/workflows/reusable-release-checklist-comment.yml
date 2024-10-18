@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
             ### Developer checklist
@@ -48,4 +48,4 @@ jobs:
             - [ ] Have the changes been verified in the test deployment?
             ${{ inputs.additional_reviewer_items }}
 
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+          github-token: ${{ secrets.USER_TOKEN }}
