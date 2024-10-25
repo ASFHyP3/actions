@@ -8,7 +8,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.12.1]
 ### Fixed
-- The [`reusable-release-action`](.github/workflows/reusable-release.yml) no longer uses the deprecated, archived, and broken `repo-sync/pull-request` action.
+- The [`reusable-release-action`](.github/workflows/reusable-release.yml) now uses the `gh` CLI instead of the archived `repo-sync/pull-request` action.
 
 ## [0.12.0]
 ### Added

@@ -43,7 +43,7 @@ jobs:
           git merge --ff-only origin/${{ inputs.release_branch }}
           git push
 
-      - name: On failure, Open PR to bring release back to develop
+      - name: On failure, open PR to bring release back to develop
         if: ${{ failure() }}
         env:
           PR_TITLE: Pulling ${{ github.ref }} into ${{ inputs.develop_branch }}
