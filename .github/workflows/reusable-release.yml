@@ -50,9 +50,9 @@ jobs:
           PR_BODY: Fast-forward of ${{ inputs.release_branch }} to ${{ inputs.develop_branch }} failed!
           GH_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
-          gh pr create -t "${PR_TITLE}" \
-                      -b "${PR_BODY}" \
-                      -a ${{ github.actor }} \
-                      -l ${{ inputs.sync_pr_label }} \
-                      -H ${{ inputs.release_branch }} \
-                      -B ${{ inputs.develop_branch }}
+          gh pr create --title "${PR_TITLE}" \
+                      --body "${PR_BODY}" \
+                      --assignee ${{ github.actor }} \
+                      --label ${{ inputs.sync_pr_label }} \
+                      --head ${{ inputs.release_branch }} \
+                      --base ${{ inputs.develop_branch }}
