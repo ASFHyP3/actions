@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0]
+### Added
+- [`reusable-mypy`](.github/workflows/reusable-mypy.yml) reusable workflow for performing static type checking with [mypy](https://github.com/python/mypy).
+
 ## [0.12.1]
 ### Fixed
 - The [`reusable-release-action`](.github/workflows/reusable-release.yml) now uses the `gh` CLI instead of the archived `repo-sync/pull-request` action.
