@@ -1,9 +1,5 @@
 on:
   workflow_call:
-    inputs:
-      source_directory:
-        required: true
-        type: string
 
 jobs:
   check-with-mypy:
@@ -22,4 +18,4 @@ jobs:
           python -m pip install mypy
 
       - name: mypy static type check
-        run: mypy --install-types --ignore-missing-imports --non-interactive --pretty ${{ inputs.source_directory }}
+        run: mypy --install-types --ignore-missing-imports --non-interactive --pretty .
