@@ -6,7 +6,7 @@ on:
         type: string
 
 jobs:
-  check-with-ruff:
+  check-with-mypy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,5 +22,5 @@ jobs:
           python -m pip install mypy
           mypy --install-types --non-interactive ${{ inputs.source_directory }}
 
-      - name: mypy static typing check
+      - name: mypy static type check
         run: mypy --ignore-missing-imports ${{ inputs.source_directory }}
