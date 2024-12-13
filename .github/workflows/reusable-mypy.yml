@@ -18,4 +18,4 @@ jobs:
           python -m pip install mypy
 
       - name: mypy static type check
-        run: mypy --install-types --ignore-missing-imports --non-interactive --pretty .
+        run: mkdir .mypy_cache && mypy --install-types --ignore-missing-imports --non-interactive --pretty .
