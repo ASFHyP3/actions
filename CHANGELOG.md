@@ -8,7 +8,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.13.0]
 ### Changed
-- The [`reusable-ruff`] action now checks for import order.
+- The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) action now checks for import order.
 
 ## [0.12.1]
 ### Fixed
