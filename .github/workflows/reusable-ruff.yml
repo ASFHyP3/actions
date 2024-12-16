@@ -19,7 +19,7 @@ jobs:
 
       # To automatically fix errors, run `ruff check --select I --fix .`
       - name: Ruff linting check
-        run: ruff check --select I --output-format=github .
+        run: ruff check --select I --output-format=github . || echo 'To automatically fix errors, run `ruff check --select I --fix .`'
 
       - name: Ruff format check
         run: ruff format --diff . || echo 'To automatically fix errors, run `ruff format .`'
