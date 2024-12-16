@@ -23,4 +23,4 @@ jobs:
 
       # To automatically fix errors, run `ruff format .`
       - name: Ruff format check
-        run: ruff format .
+        run: ruff format --diff . || echo 'To automatically fix errors, run `ruff format .`'
