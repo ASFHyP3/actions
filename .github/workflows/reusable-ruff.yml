@@ -18,7 +18,9 @@ jobs:
           python -m pip install ruff
 
       - name: Ruff linting check
-        run: ruff check --output-format=github . || echo 'To automatically fix errors, run `ruff check --fix .`'
+        # To automatically fix errors, run `ruff check --fix .`
+        run: ruff check --output-format=github .
 
       - name: Ruff format check
-        run: ruff format --diff . || echo 'To automatically fix errors, run `ruff format .`'
+        # To automatically fix errors, run `ruff format .`
+        run: ruff format --diff .
