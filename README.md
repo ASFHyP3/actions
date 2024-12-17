@@ -236,6 +236,8 @@ To conform to ASFHyP3's Python style add the following to your project's `pyproj
 ```toml
 [tool.ruff]
 line-length = 120
+# The directories to consider when resolving first- vs. third-party imports.
+# See: https://docs.astral.sh/ruff/settings/#src
 src = ["src", "tests"]
 
 [tool.ruff.format]
@@ -257,12 +259,6 @@ convention = "google"
 [tool.ruff.lint.isort]
 case-sensitive = true
 lines-after-imports = 2
-```
-
-Ruff can automatically fix many linting errors and reformat code to match your Python style by running these  commands:
-```shell
-ruff check --fix .
-ruff format .
 ```
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
