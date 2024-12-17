@@ -233,7 +233,7 @@ jobs:
 Make sure that `pyproject.toml` contains the appropriate Python version specifier
 (see the [ruff docs](https://docs.astral.sh/ruff/settings/#target-version)), e.g:
 
-```
+```toml
 [project]
 requires-python = ">=3.13"
 ```
