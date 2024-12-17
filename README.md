@@ -230,9 +230,17 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.12.0
 ```
 
-to ensure the Python code is styled correctly.
+Make sure that `pyproject.toml` contains the appropriate Python version specifier
+(see the [ruff docs](https://docs.astral.sh/ruff/settings/#target-version)), e.g:
 
-To conform to ASFHyP3's Python style add the following to your project's `pyproject.toml`:
+```
+[project]
+requires-python = ">=3.13"
+```
+
+To conform to ASFHyP3's Python style add the following to `pyproject.toml`
+(and update the `src =` line as needed, for import ordering):
+
 ```toml
 [tool.ruff]
 line-length = 120
