@@ -230,12 +230,22 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.12.0
 ```
 
-to ensure the Python code is styled correctly.
+Make sure that `pyproject.toml` contains the appropriate Python version specifier
+(see the [ruff docs](https://docs.astral.sh/ruff/settings/#target-version)), e.g:
 
-To conform to ASFHyP3's Python style add the following to your project's `pyproject.toml`:
+```toml
+[project]
+requires-python = ">=3.13"
+```
+
+To conform to ASFHyP3's Python style add the following to `pyproject.toml`
+(and update the `src =` line as needed, for import ordering):
+
 ```toml
 [tool.ruff]
 line-length = 120
+# The directories to consider when resolving first- vs. third-party imports.
+# See: https://docs.astral.sh/ruff/settings/#src
 src = ["src", "tests"]
 
 [tool.ruff.format]
@@ -257,12 +267,6 @@ convention = "google"
 [tool.ruff.lint.isort]
 case-sensitive = true
 lines-after-imports = 2
-```
-
-Ruff can automatically fix many linting errors and reformat code to match your Python style by running these  commands:
-```shell
-ruff check --fix .
-ruff format .
 ```
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
