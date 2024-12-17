@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.1]
+
+### Changed
+- Reverts the addition of `--select I` to [`reusable-ruff`](.github/workflows/reusable-ruff.yml), as this option is already included in the recommended `pyproject.toml` settings given in the README.
+
 ## [0.13.0]
 
 ### Changed
