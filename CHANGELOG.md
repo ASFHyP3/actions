@@ -6,11 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.13.0]
+## [0.14.0]
+
 ### Added
 - [`reusable-mypy`](.github/workflows/reusable-mypy.yml) reusable workflow for performing static type checking with [mypy](https://github.com/python/mypy).
 
-## [0.12.1]
+## [0.13.2]
+
+### Fixed
+- Fix a bug in which [`reusable-ruff`](.github/workflows/reusable-ruff.yml) errors did not cause the action to fail.
+
+## [0.13.1]
+
+### Changed
+- Reverts the addition of `--select I` to [`reusable-ruff`](.github/workflows/reusable-ruff.yml), as this option is already included in the recommended `pyproject.toml` settings given in the README.
+
+## [0.13.0]
+
+### Changed
+- The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) action now checks for import order.
+
 ### Fixed
 - The [`reusable-release-action`](.github/workflows/reusable-release.yml) now uses the `gh` CLI instead of the archived `repo-sync/pull-request` action.
 
