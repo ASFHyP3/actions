@@ -23,7 +23,7 @@ jobs:
 
       - name: ruff check failure
         if: ${{ failure() && steps.ruff_check.conclusion == 'failure' }}
-        run: echo 'To automatically fix errors, run `ruff check --fix .`'
+        run: echo 'To automatically fix errors, run `ruff check --fix .`' && exit 1
 
       - name: ruff format
         id: ruff_format
