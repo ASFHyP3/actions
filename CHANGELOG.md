@@ -11,6 +11,9 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - [`reusable-mypy`](.github/workflows/reusable-mypy.yml) reusable workflow for performing static type checking with [mypy](https://github.com/python/mypy).
 
+### Removed
+- `reusable-flake8.yml` has been removed. We recommend [`reusable-ruff`](.github/workflows/reusable-ruff.yml) instead.
+
 ## [0.13.2]
 
 ### Fixed
