@@ -17,10 +17,18 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ruff
 
-      - name: Ruff linting check
-        # To automatically fix errors, run `ruff check --fix .`
+      - name: ruff check
+        id: ruff_check
         run: ruff check --output-format=github .
 
-      - name: Ruff format check
-        # To automatically fix errors, run `ruff format .`
+      - name: ruff check failure
+        if: ${{ failure() && steps.ruff_check.conclusion == 'failure' }}
+        run: echo 'To automatically fix errors, run `ruff check --fix .`'
+
+      - name: ruff format
+        id: ruff_format
         run: ruff format --diff .
+
+      - name: ruff format failure
+        if: ${{ failure() && steps.ruff_format.conclusion == 'failure' }}
+        run: echo 'To automatically fix errors, run `ruff format .`'
