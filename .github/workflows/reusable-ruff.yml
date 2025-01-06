@@ -18,7 +18,7 @@ jobs:
           python -m pip install ruff
 
       - name: ruff check
-        run: ruff check
+        run: ruff check --output-format=github || (echo 'Run `ruff check` locally to see which errors can be automatically resolved with the `--fix` option.' && exit 1)
 
       - name: ruff format
         run: ruff format --diff || (echo 'To automatically re-format, run `ruff format`' && exit 1)
