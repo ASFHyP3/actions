@@ -197,25 +197,6 @@ jobs:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
-
-Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
-
-```yaml
-name: Static analysis
-
-on: push
-
-jobs:
-  call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.13.2
-    with:
-      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
-      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
-```
-
-to ensure the Python code is styled correctly.
-
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
 
 Runs [Ruff](https://docs.astral.sh/ruff/) to enforce a configurable Python style guide. Use like:
@@ -267,6 +248,50 @@ convention = "google"
 [tool.ruff.lint.isort]
 case-sensitive = true
 lines-after-imports = 2
+```
+
+### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
+
+Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
+
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-mypy-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.14.0
+```
+
+To use our recommended configuration options, add the following to `pyproject.toml`:
+
+```toml
+[tool.mypy]
+python_version = ""
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+strict_equality = true
+check_untyped_defs = true
+```
+
+Populate the
+[`python_version`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-python_version) field
+with the appropriate Python version in the format `MAJOR.MINOR`.
+This should probably be the minimum Python version supported by the project,
+determined by the value of the
+[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field.
+For example, if `requires-python` specifies `>=3.10`, then you may want to set `python_version` to `3.10`, like this:
+
+```
+[project]
+requires-python = ">=3.10"
+
+...
+
+[tool.mypy]
+python_version = "3.10"
 ```
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
