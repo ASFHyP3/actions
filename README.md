@@ -284,7 +284,7 @@ determined by the value of the
 [`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field.
 For example, if `requires-python` specifies `>=3.10`, then you may want to set `python_version` to `3.10`, like this:
 
-```toml
+```
 [project]
 requires-python = ">=3.10"
 
