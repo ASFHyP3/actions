@@ -14,5 +14,4 @@ jobs:
       - name: Check with MyPy
         shell: bash -l {0}
         run: |
-          python -m pip install --no-deps .
           mkdir .mypy_cache && mypy --install-types --ignore-missing-imports --non-interactive --pretty .
