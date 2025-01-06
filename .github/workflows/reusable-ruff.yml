@@ -19,7 +19,7 @@ jobs:
 
       - name: ruff check
         id: ruff_check
-        run: ruff check --output-format=github . || (echo 'To automatically fix errors, run `ruff check --fix .`' && exit 1)
+        run: ruff check --output-format=github .
 
       - name: ruff format
         id: ruff_format
