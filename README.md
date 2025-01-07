@@ -27,7 +27,7 @@ jobs:
   call-bump-version-workflow:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.13.2
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -68,7 +68,7 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.13.2
 ```
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
@@ -86,7 +86,7 @@ on:
 
 jobs:
   call-create-jira-issue-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.13.2
     secrets:
       JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
@@ -139,13 +139,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.13.2
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.13.2
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -180,13 +180,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.13.2
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.13.2
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
@@ -196,25 +196,6 @@ jobs:
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-### [`reusable-flake8.yml`](./.github/workflows/reusable-flake8.yml)
-
-Runs [flake8](https://flake8.pycqa.org/en/latest/) to enforce ASFHyP3's Python style guide. Use like:
-
-```yaml
-name: Static analysis
-
-on: push
-
-jobs:
-  call-flake8-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-flake8.yml@v0.12.0
-    with:
-      local_package_names: hyp3_plugin  # Required; comma-seperated list of names that should be considered local to your application
-      excludes: hyp3_plugin/ugly.py     # Optional; comma-separated list of glob patterns to exclude from checks
-```
-
-to ensure the Python code is styled correctly.
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
 
@@ -227,7 +208,7 @@ on: push
 
 jobs:
   call-ruff-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.13.2
 ```
 
 Make sure that `pyproject.toml` contains the appropriate Python version specifier
@@ -269,6 +250,50 @@ case-sensitive = true
 lines-after-imports = 2
 ```
 
+### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
+
+Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
+
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-mypy-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.14.0
+```
+
+To use our recommended configuration options, add the following to `pyproject.toml`:
+
+```toml
+[tool.mypy]
+python_version = ""
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+strict_equality = true
+check_untyped_defs = true
+```
+
+Populate the
+[`python_version`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-python_version) field
+with the appropriate Python version in the format `MAJOR.MINOR`.
+This should probably be the minimum Python version supported by the project,
+determined by the value of the
+[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field.
+For example, if `requires-python` specifies `>=3.10`, then you may want to set `python_version` to `3.10`, like this:
+
+```
+[project]
+requires-python = ">=3.10"
+
+...
+
+[tool.mypy]
+python_version = "3.10"
+```
+
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
 Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
@@ -289,7 +314,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.13.2
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
@@ -319,7 +344,7 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.13.2
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -343,7 +368,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.13.2
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
@@ -372,7 +397,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.13.2
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -401,7 +426,7 @@ on:
   
 jobs:
   call-release-checklist-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.13.2
     permissions:
       pull-requests: write
     with:
@@ -431,7 +456,7 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.13.2
 ```
 to scan every push for secrets.
 
@@ -457,7 +482,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.12.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.13.2
     with:
       python_version: '3.12'        # Optional; default shown
 

@@ -1,0 +1,17 @@
+on:
+  workflow_call:
+
+jobs:
+  check-with-mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+
+      - name: Check with MyPy
+        shell: bash -l {0}
+        run: |
+          mkdir .mypy_cache && mypy --install-types --ignore-missing-imports --non-interactive --pretty .
