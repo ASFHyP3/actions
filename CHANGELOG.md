@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0]
+
+### Removed
+- The [`reusable-mypy`](.github/workflows/reusable-mypy.yml) workflow no longer passes any optional arguments to the `mypy` command. If you want to preserve these options, you must now add them to `[tool.mypy]` in `pyproject.toml`:
+  ```toml
+  install_types = true
+  non_interactive = true
+  pretty = true
+  ignore_missing_imports = true
+  ```
+  Note that we discourage enabling `ignore_missing_imports` as a global option (see <https://github.com/ASFHyP3/actions/issues/225>). You can always find our currently recommended configuration options in the [README](https://github.com/ASFHyP3/actions#reusable-mypyyml).
+
 ## [0.14.0]
 
 ### Added

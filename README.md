@@ -274,6 +274,9 @@ warn_unused_ignores = true
 warn_unreachable = true
 strict_equality = true
 check_untyped_defs = true
+install_types = true
+non_interactive = true
+pretty = true
 ```
 
 Populate the
@@ -293,6 +296,9 @@ requires-python = ">=3.10"
 [tool.mypy]
 python_version = "3.10"
 ```
+
+Note that you may need to enable additional options depending on the needs of your project.
+See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips.
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
