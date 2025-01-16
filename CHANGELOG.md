@@ -9,7 +9,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.15.0]
 
 ### Removed
-- The [`reusable-mypy`](.github/workflows/reusable-mypy.yml) workflow no longer passes any optional arguments to the `mypy` command. If you want to preserve these options, you must now add them to `[tool.mypy]` in `pyproject.toml`:
+- The [`reusable-mypy`](.github/workflows/reusable-mypy.yml) workflow no longer passes any optional arguments to the `mypy` command. This makes it easier to run `mypy` locally, because the command is now just `mypy .`. If you want to preserve the removed options for your project, you must now add them to `[tool.mypy]` in `pyproject.toml`:
   ```toml
   install_types = true
   non_interactive = true
