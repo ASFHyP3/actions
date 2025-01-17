@@ -47,7 +47,7 @@ jobs:
           sed -i -r "s|$SEARCH_PATTERN|\1@${ACTIONS_VERSION}|g" README.md
           
           git commit -am "Bump actions example's version to ${ACTIONS_VERSION}"
-          git push origin ${UPDATE_BRANCH}
+          git push -u origin ${UPDATE_BRANCH}
 
       - name: Open PR
         env:
