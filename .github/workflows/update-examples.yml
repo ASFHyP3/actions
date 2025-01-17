@@ -49,10 +49,16 @@ jobs:
           git commit -am "Bump actions example's version to ${ACTIONS_VERSION}"
           git push origin ${UPDATE_BRANCH}
 
+          git status
+
       - name: Open PR
         env:
           PR_TITLE: Update Actions example versions to ${{ env.ACTIONS_VERSION }}
           PR_BODY: PR created by a new `v*` tag push event
           GH_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
+          GH_DEBUG: "1"
         run: |
+          git status
+          gh pr create -t "${PR_TITLE}" -b "${PR_BODY}" -l tools-bot -l bumpless -B develop --dry-run
+          
           gh pr create -t "${PR_TITLE}" -b "${PR_BODY}" -l tools-bot -l bumpless -B develop
