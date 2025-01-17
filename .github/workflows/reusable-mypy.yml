@@ -14,4 +14,4 @@ jobs:
       - name: Check with MyPy
         shell: bash -l {0}
         run: |
-          mkdir .mypy_cache && mypy --install-types --ignore-missing-imports --non-interactive --pretty .
+          mkdir .mypy_cache && mypy .
