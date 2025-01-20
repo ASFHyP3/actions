@@ -277,6 +277,7 @@ check_untyped_defs = true
 install_types = true
 non_interactive = true
 pretty = true
+disable_error_code = ["import-untyped"]
 ```
 
 Populate the
