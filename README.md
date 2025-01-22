@@ -222,6 +222,8 @@ requires-python = ">=3.13"
 To conform to ASFHyP3's Python style add the following to `pyproject.toml`
 (and update the `src =` line as needed, for import ordering):
 
+<!-- When updating these options, please also update
+     https://github.com/ASFHyP3/hyp3-cookiecutter/blob/develop/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml -->
 ```toml
 [tool.ruff]
 line-length = 120
@@ -266,6 +268,8 @@ jobs:
 
 To use our recommended configuration options, add the following to `pyproject.toml`:
 
+<!-- When updating these options, please also update
+     https://github.com/ASFHyP3/hyp3-cookiecutter/blob/develop/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml -->
 ```toml
 [tool.mypy]
 python_version = ""
@@ -277,6 +281,7 @@ check_untyped_defs = true
 install_types = true
 non_interactive = true
 pretty = true
+disable_error_code = ["import-untyped"]
 ```
 
 Populate the
