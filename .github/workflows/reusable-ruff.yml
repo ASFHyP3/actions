@@ -21,4 +21,5 @@ jobs:
         run: ruff check --output-format=github || (echo 'Run `ruff check --fix` to automatically fix errors where possible.' && exit 1)
 
       - name: ruff format
+        if: ${{ !cancelled() }}
         run: ruff format --diff || (echo 'Run `ruff format` to automatically re-format.' && exit 1)
