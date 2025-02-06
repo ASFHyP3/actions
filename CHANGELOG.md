@@ -9,7 +9,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.17.0]
 
 ### Changed
-- The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) workflow now runs inside a mamba environment and assumes the presence of a `environment.yml` file.
+- The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) workflow now runs inside a mamba environment and assumes the presence of an `environment.yml` file.
 - We now recommend pinning to an exact version for both `ruff` and `mypy` in your project dependencies, to avoid unexpected static analysis errors due to unpinned dependency upgrades.
 - We now recommend adding the following lines to `pyproject.toml`, to bring our recommended `ruff` settings in line with [hyp3-cookiecutter](https://github.com/ASFHyP3/hyp3-cookiecutter/blob/v0.3.3/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml#L56-L84):
 
