@@ -213,7 +213,7 @@ jobs:
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
 We recommend pinning to an exact version of `ruff` in your project dependencies,
-because upgrading `ruff` may result in new errors being reported by the `check` and `format` commands.
+because upgrading `ruff` may result in new static analysis errors being reported.
 
 Make sure that `pyproject.toml` contains the appropriate Python version specifier
 (see the [ruff docs](https://docs.astral.sh/ruff/settings/#target-version)), e.g:
