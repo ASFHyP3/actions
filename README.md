@@ -208,8 +208,12 @@ on: push
 
 jobs:
   call-ruff-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.16.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.17.0
 ```
+
+Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
+We recommend pinning to an exact version of `ruff` in your project dependencies,
+because upgrading `ruff` may result in new errors being reported by the `check` and `format` commands.
 
 Make sure that `pyproject.toml` contains the appropriate Python version specifier
 (see the [ruff docs](https://docs.astral.sh/ruff/settings/#target-version)), e.g:
@@ -250,6 +254,9 @@ convention = "google"
 [tool.ruff.lint.isort]
 case-sensitive = true
 lines-after-imports = 2
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*" = ["D100", "D103", "ANN"]
 ```
 
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
@@ -263,8 +270,12 @@ on: push
 
 jobs:
   call-mypy-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.16.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.17.0
 ```
+
+Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
+We recommend pinning to an exact version of `mypy` in your project dependencies,
+because upgrading `mypy` may result in new type errors being reported.
 
 To use our recommended configuration options, add the following to `pyproject.toml`:
 
