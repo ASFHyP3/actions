@@ -6,7 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [ 0.16.0]
+## [0.17.0]
+
+### Changed
+- The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) workflow now runs inside a mamba environment and assumes the presence of an `environment.yml` file.
+- We now recommend pinning to an exact version for both `ruff` and `mypy` in your project dependencies, to avoid unexpected static analysis errors due to unpinned dependency upgrades.
+- We now recommend adding the following lines to `pyproject.toml`, to bring our recommended `ruff` settings in line with [hyp3-cookiecutter](https://github.com/ASFHyP3/hyp3-cookiecutter/blob/v0.3.3/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml#L56-L84):
+
+    ```toml
+    [tool.ruff.lint.extend-per-file-ignores]
+    "tests/*" = ["D100", "D103", "ANN"]
+    ```
+
+## [0.16.0]
 
 ### Changed
 - The [`reusable-ruff`](.github/workflows/reusable-ruff.yml) workflow will now run the ruff format step whether or not the ruff check step failed.
