@@ -12,8 +12,12 @@ jobs:
           environment-file: environment.yml
 
       - name: ruff check
-        run: ruff check --output-format=github || (echo 'Run `ruff check --fix` to automatically fix errors where possible.' && exit 1)
+        shell: bash -l {0}
+        run: |
+          ruff check --output-format=github || (echo 'Run `ruff check --fix` to automatically fix errors where possible.' && exit 1)
 
       - name: ruff format
+        shell: bash -l {0}
         if: ${{ !cancelled() }}
-        run: ruff format --diff || (echo 'Run `ruff format` to automatically re-format.' && exit 1)
+        run: |
+          ruff format --diff || (echo 'Run `ruff format` to automatically re-format.' && exit 1)
