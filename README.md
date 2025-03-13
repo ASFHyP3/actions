@@ -298,6 +298,9 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 > For more information about how mypy accommodates dynamic typing,
 > see the docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
 > and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
+>
+> Additionally, mypy itself can have some counter-intuitive behavior.
+> Please review our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for additional configuration tips and troubleshooting.
 
 Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
 
@@ -346,8 +349,6 @@ If you want mypy to skip analyzing functions without type annotations
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
 Removing this option can be helpful when adding mypy to an existing codebase with portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
-
-See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for additional configuration tips and troubleshooting.
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
