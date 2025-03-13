@@ -344,7 +344,7 @@ in `pyproject.toml`.
 If you want mypy to skip analyzing functions without type annotations
 (as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
-This can be helpful when adding mypy to an existing codebase with portions of untyped code,
+Removing this option can be helpful when adding mypy to an existing codebase with portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
 
 You may need to enable additional options depending on the needs of your project.
