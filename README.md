@@ -199,7 +199,7 @@ jobs:
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
 
-Runs [Ruff](https://docs.astral.sh/ruff/) to enforce a configurable Python style guide. Use like:
+Runs [ruff](https://docs.astral.sh/ruff/) to enforce a configurable Python style guide. Use like:
 
 ```yaml
 name: Static analysis
