@@ -11,7 +11,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Added notes to our [ruff documentation](https://github.com/ASFHyP3/actions#reusable-ruffyml) on how to relax the rules for docstrings and type annotations.
 - Added a warning to our [mypy documentation](https://github.com/ASFHyP3/actions#reusable-mypyyml) regarding the limitations of using a static type checker on Python code.
-- Added a note about how the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option included in our recommended mypy settings differs from mypy's [default static vs. dynamic typing behavior]((https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)).
+- Added a note about how the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option included in our recommended mypy settings differs from mypy's [default static vs. dynamic typing behavior](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static).
 
 ### Changed
 - Updated our [recommended ruff settings](https://github.com/ASFHyP3/actions#reusable-ruffyml) to suppress type annotation warnings for dummy function parameters (e.g. `_`) and ignore *all* `D1` rules (missing docstring warnings) for `tests/`:
