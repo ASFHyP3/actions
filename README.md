@@ -259,17 +259,18 @@ lines-after-imports = 2
 suppress-dummy-args = true
 
 [tool.ruff.lint.extend-per-file-ignores]
-"*" = [
-    "D1", # Ignore warnings about missing docstrings
-    "ANN401", # Ignore warnings about use of the Any type
-]
-"tests/*" = ["ANN"]
+"tests/*" = ["D1", "ANN"]
 ```
 
 Notes about the [pydocstyle (D)](https://docs.astral.sh/ruff/rules/#pydocstyle-d) extension:
 
-- Our recommended configuration ignores the `D1` family of errors for missing docstrings in public functions, classes, etc.
-  You may want to remove this from the ignore list, especially if your project is published as a library.
+- If you do not want to require docstrings for public functions, methods, classes, and modules
+  (e.g. when adding ruff to an existing codebase),
+  you can add the following to the `[tool.ruff.lint.extend-per-file-ignores]` section:
+
+  ```
+  "*" = ["D1"]
+  ```
 
 Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#flake8-annotations-ann) extension:
 
@@ -284,7 +285,7 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
   Alternatively, you may want to enable the
   [`ignore-fully-untyped`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_ignore-fully-untyped) option
   (similar to mypy's [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs) option)
-  when adding the `ANN` extension to an existing codebase with portions of untyped code.
+  when adding the `ANN` extension to an existing codebase with large portions of untyped code.
 
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
 
@@ -347,7 +348,7 @@ in `pyproject.toml`.
 If you want mypy to skip analyzing functions without type annotations
 (as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
-Removing this option can be helpful when adding mypy to an existing codebase with portions of untyped code,
+Removing this option can be helpful when adding mypy to an existing codebase with large portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
