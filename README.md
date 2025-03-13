@@ -347,7 +347,7 @@ you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stab
 Removing this option can be helpful when adding mypy to an existing codebase with portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
 
-You may need to enable additional options depending on the needs of your project.
+You may need to perform additional configuration for your particular project.
 See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips.
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
