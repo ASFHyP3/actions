@@ -299,9 +299,9 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 > see the docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
 > and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
 >
-> Additionally, mypy itself can have some counter-intuitive behavior.
-> Please review our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips and troubleshooting
-> beyond what's shown here.
+> Additionally, configuring mypy for your individual project can be counter-intuitive.
+> Please review our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article
+> for configuration tips and troubleshooting beyond what's shown here.
 
 Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
 
