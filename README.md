@@ -266,6 +266,11 @@ suppress-dummy-args = true
 "tests/*" = ["ANN"]
 ```
 
+Notes about the [pydocstyle (D)](https://docs.astral.sh/ruff/rules/#pydocstyle-d) extension:
+
+- Our recommended configuration ignores the `D1` family of errors for missing docstrings in public functions, classes, etc.
+  You may want to remove this from the ignore list, especially if your project is published as a library.
+
 Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#flake8-annotations-ann) extension:
 
 - Checks for missing type annotations, but does not perform static type checking (that's mypy's job).
