@@ -272,8 +272,8 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 
 - Mypy also includes options for enforcing type annotations
   (see [`disallow_untyped_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_untyped_defs)
-  and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)).
-  We started using ruff's `ANN` extension before mypy, so we're sticking with `ANN` for now.
+  and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)),
+  but we started using ruff's `ANN` extension before mypy, so we're sticking with `ANN` for now.
   Also, mypy does not appear to have an equivalent to [`suppress-dummy-args`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_suppress-dummy-args)
   for allowing untyped dummy function parameters (`_`, `__`, etc.),
   which is useful for functions that must have a particular interface but don't use all of their parameters.
