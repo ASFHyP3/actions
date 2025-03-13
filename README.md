@@ -339,7 +339,7 @@ with the appropriate Python version in the format `MAJOR.MINOR`.
 We recommend setting this to the minimum Python version supported by your project,
 determined by the value of the
 [`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field
-in your `pyproject.toml` file.
+in `pyproject.toml`.
 
 If you want mypy to skip analyzing functions without type annotations
 (as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
