@@ -290,7 +290,7 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 
 > [!WARNING]
 > Mypy does not turn Python into a statically-typed language,
-> especially when mixing typed and untyped code, using the `Any` type annotation,
+> especially when mixing typed and untyped code, using the `Any` type,
 > or importing untyped third-party libraries.
 > Type annotations are more like hints about what types values *should* have,
 > rather than a guarantee of runtime type safety.
