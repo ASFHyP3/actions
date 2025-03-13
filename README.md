@@ -306,12 +306,6 @@ pretty = true
 disable_error_code = ["import-untyped"]
 ```
 
-If you do not want mypy to analyze the bodies of functions without type annotations
-(as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
-you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
-This can be helpful when adding mypy to an existing codebase with portions of untyped code,
-or if you simply want the ability to opt out of static type checking on a per-function basis.
-
 Populate the
 [`python_version`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-python_version) field
 with the appropriate Python version in the format `MAJOR.MINOR`.
@@ -319,6 +313,12 @@ We recommend setting this to the minimum Python version supported by your projec
 determined by the value of the
 [`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field
 in your `pyproject.toml` file.
+
+If you do not want mypy to analyze the bodies of functions without type annotations
+(as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
+you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
+This can be helpful when adding mypy to an existing codebase with portions of untyped code,
+or if you simply want the ability to opt out of static type checking on a per-function basis.
 
 Note that you may need to enable additional options depending on the needs of your project.
 See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips.
