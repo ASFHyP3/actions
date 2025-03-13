@@ -261,6 +261,17 @@ lines-after-imports = 2
 
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
 
+> [!WARNING]
+> Mypy does not turn Python into a statically-typed language,
+> especially when mixing typed and untyped code, using the `Any` type annotation,
+> or importing untyped third-party libraries.
+> Type annotations are more like hints about what types values *should* have,
+> rather than a guarantee of runtime type safety.
+> They are not a replacement for best practices when using a dynamically-typed language.
+> For more information about how mypy accommodates dynamic typing,
+> see the docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
+> and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
+
 Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
 
 ```yaml
@@ -295,23 +306,19 @@ pretty = true
 disable_error_code = ["import-untyped"]
 ```
 
+If you do not want mypy to analyze the bodies of functions without type annotations
+(as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
+you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
+This can be helpful when adding mypy to an existing codebase with portions of untyped code,
+or if you simply want the ability to opt out of static type checking on a per-function basis.
+
 Populate the
 [`python_version`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-python_version) field
 with the appropriate Python version in the format `MAJOR.MINOR`.
-This should probably be the minimum Python version supported by the project,
+We recommend setting this to the minimum Python version supported by your project,
 determined by the value of the
-[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field.
-For example, if `requires-python` specifies `>=3.10`, then you may want to set `python_version` to `3.10`, like this:
-
-```
-[project]
-requires-python = ">=3.10"
-
-...
-
-[tool.mypy]
-python_version = "3.10"
-```
+[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field
+in your `pyproject.toml` file.
 
 Note that you may need to enable additional options depending on the needs of your project.
 See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips.
