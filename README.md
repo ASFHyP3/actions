@@ -293,8 +293,8 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 > especially when mixing typed and untyped code, using the `Any` type,
 > or importing untyped third-party libraries.
 > Type annotations are more like hints about what types values *should* have,
-> rather than a guarantee of runtime type safety.
-> They are not a replacement for best practices when using a dynamically-typed language.
+> rather than a guarantee of runtime type safety,
+> and are not a replacement for best practices when using a dynamically-typed language.
 > For more information about how mypy accommodates dynamic typing,
 > see the docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
 > and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
