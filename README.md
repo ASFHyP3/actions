@@ -341,7 +341,7 @@ determined by the value of the
 [`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field
 in your `pyproject.toml` file.
 
-If you do not want mypy to analyze the bodies of functions without type annotations
+If you want mypy to skip analyzing functions without type annotations
 (as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
 This can be helpful when adding mypy to an existing codebase with portions of untyped code,
