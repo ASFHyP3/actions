@@ -255,9 +255,31 @@ convention = "google"
 case-sensitive = true
 lines-after-imports = 2
 
+[tool.ruff.lint.flake8-annotations]
+suppress-dummy-args = true
+
 [tool.ruff.lint.extend-per-file-ignores]
-"tests/*" = ["D100", "D103", "ANN"]
+"*" = [
+    "D1", # Ignore warnings about missing docstrings
+    "ANN401", # Ignore warnings about use of the Any type
+]
+"tests/*" = ["ANN"]
 ```
+
+Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#flake8-annotations-ann) extension:
+
+- Checks for missing type annotations, but does not perform static type checking (that's mypy's job).
+
+- Mypy also includes options for enforcing type annotations
+  (see [`disallow_untyped_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_untyped_defs)
+  and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)).
+  We started using ruff's `ANN` extension before mypy, so we are sticking with `ANN` for enforcing type annotations for now.
+
+- Feel free to remove this extension if you do not want to use static typing for your project.
+  Alternatively, you may want to enable the
+  [`ignore-fully-untyped`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_ignore-fully-untyped) option
+  (similar to mypy's [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs) option)
+  when adding the `ANN` extension to an existing codebase with portions of untyped code.
 
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
 
