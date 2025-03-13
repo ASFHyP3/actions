@@ -268,7 +268,7 @@ Notes about the [pydocstyle (D)](https://docs.astral.sh/ruff/rules/#pydocstyle-d
   (e.g. when adding ruff to an existing codebase),
   you can add the following to the `[tool.ruff.lint.extend-per-file-ignores]` section:
 
-  ```
+  ```toml
   "*" = ["D1"]
   ```
 
