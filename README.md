@@ -281,6 +281,11 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
   and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)),
   but we started using ruff's `ANN` extension before mypy, so we're sticking with `ANN` for now.
 
+- Although the [`ANN401`](https://docs.astral.sh/ruff/rules/any-type/) rule warns you about annotating function parameters with `Any`,
+  this does *not* guarantee that your code does not contain values of type `Any`;
+  for example, `x: list` is equivalent to `x: list[Any]`.
+  For more details, see the mypy docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html).
+
 - Feel free to remove this extension if you do not want to use static typing for your project.
   Alternatively, you may want to enable the
   [`ignore-fully-untyped`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_ignore-fully-untyped) option
@@ -291,7 +296,7 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 
 > [!WARNING]
 > Mypy does not turn Python into a statically-typed language,
-> especially when mixing typed and untyped code, using the `Any` type,
+> especially when mixing typed and untyped code, using the `Any` type (implicitly or explicitly),
 > or importing untyped third-party libraries.
 > Type annotations are more like hints about what types values *should* have,
 > rather than a guarantee of runtime type safety.
