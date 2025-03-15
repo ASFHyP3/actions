@@ -291,8 +291,8 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 
 > [!IMPORTANT]
 > You may want to review the [mypy docs](https://mypy.readthedocs.io/en/stable/),
-> particularly the sections on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
-> and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
+> particularly the [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html) article
+> to learn more about the circumstances under which mypy treats your code as dynamically typed.
 >
 > Additionally, please review our [Mypy wiki article](https://github.com/ASFHyP3/.github/wiki/Mypy)
 > for configuration tips and troubleshooting beyond what's shown here.
