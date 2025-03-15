@@ -281,11 +281,6 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
   and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)),
   but we started using ruff's `ANN` extension before mypy, so we're sticking with `ANN` for now.
 
-- Although the [`ANN401`](https://docs.astral.sh/ruff/rules/any-type/) rule warns you about annotating function parameters with `Any`,
-  this does *not* guarantee that your code does not contain values of type `Any`;
-  for example, `x: list` is equivalent to `x: list[Any]`.
-  For more details, see the mypy docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html).
-
 - Feel free to remove this extension if you do not want to use static typing for your project.
   Alternatively, you may want to enable the
   [`ignore-fully-untyped`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_ignore-fully-untyped) option
@@ -294,15 +289,10 @@ Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#fl
 
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
 
-> [!WARNING]
-> Mypy does not turn Python into a statically-typed language,
-> especially when mixing typed and untyped code, using the `Any` type (implicitly or explicitly),
-> or importing untyped third-party libraries.
-> Type annotations are more like hints about what types values *should* have,
-> rather than a guarantee of runtime type safety.
-> They are not a replacement for best practices when using a dynamically-typed language.
-> For more information about how mypy accommodates dynamic typing,
-> see the docs on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
+> [!IMPORTANT]
+> Mypy is an external tool and does not turn Python into a statically-typed language.
+> You may want to review the [mypy docs](https://mypy.readthedocs.io/en/stable/),
+> particularly the sections on [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html)
 > and the [`Any` type](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#the-any-type).
 >
 > Additionally, please review our [Mypy wiki article](https://github.com/ASFHyP3/.github/wiki/Mypy)
@@ -324,7 +314,9 @@ Runs inside a mamba environment and assumes the presence of an `environment.yml`
 We recommend pinning to an exact version of `mypy` in your project dependencies,
 because upgrading `mypy` may result in new type errors being reported.
 
-To use our recommended configuration, add the following to `pyproject.toml`:
+To use our recommended configuration, add the following to `pyproject.toml`
+(you may want to review the available [config options](https://mypy.readthedocs.io/en/stable/config_file.html)
+to decide if our recommendations are appropriate for your project):
 
 <!-- When updating these options, please also update
      https://github.com/ASFHyP3/hyp3-cookiecutter/blob/develop/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml -->
