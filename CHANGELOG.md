@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.0]
+
+### Added
+- Added notes to our [ruff documentation](https://github.com/ASFHyP3/actions#reusable-ruffyml) on how to relax the rules for docstrings and type annotations.
+- Added a disclaimer to our [mypy documentation](https://github.com/ASFHyP3/actions#reusable-mypyyml) regarding the limitations of using a static type checker on Python code.
+- Added a note about how the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option included in our recommended mypy settings differs from mypy's [default static vs. dynamic typing behavior](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static).
+
+### Changed
+- Updated our [recommended ruff settings](https://github.com/ASFHyP3/actions#reusable-ruffyml) to suppress type annotation warnings for dummy function parameters (e.g. `_`) and ignore *all* `D1` rules (missing docstring warnings) for `tests/`:
+
+  ```diff
+  +[tool.ruff.lint.flake8-annotations]
+  +suppress-dummy-args = true
+  +
+   [tool.ruff.lint.extend-per-file-ignores]
+  -"tests/*" = ["D100", "D103", "ANN"]
+  +"tests/*" = ["D1", "ANN"]
+  ```
+
+### Fixed
+- The link to our [Mypy wiki article](https://github.com/ASFHyP3/.github/wiki/Mypy) is now publicly accessible.
+
 ## [0.17.1]
 
 ### Fixed
