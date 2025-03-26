@@ -27,7 +27,7 @@ jobs:
   call-bump-version-workflow:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.17.1
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -68,7 +68,7 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.17.1
 ```
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
@@ -86,7 +86,7 @@ on:
 
 jobs:
   call-create-jira-issue-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.17.1
     secrets:
       JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
@@ -139,13 +139,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.17.1
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -180,13 +180,13 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.17.1
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
@@ -199,7 +199,7 @@ jobs:
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
 
-Runs [Ruff](https://docs.astral.sh/ruff/) to enforce a configurable Python style guide. Use like:
+Runs [ruff](https://docs.astral.sh/ruff/) to enforce a configurable Python style guide. Use like:
 
 ```yaml
 name: Static analysis
@@ -208,7 +208,7 @@ on: push
 
 jobs:
   call-ruff-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.17.1
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -223,7 +223,7 @@ Make sure that `pyproject.toml` contains the appropriate Python version specifie
 requires-python = ">=3.13"
 ```
 
-To conform to ASFHyP3's Python style add the following to `pyproject.toml`
+To use our recommended configuration, add the following to `pyproject.toml`
 (and update the `src =` line as needed, for import ordering):
 
 <!-- When updating these options, please also update
@@ -255,11 +255,47 @@ convention = "google"
 case-sensitive = true
 lines-after-imports = 2
 
+[tool.ruff.lint.flake8-annotations]
+suppress-dummy-args = true
+
 [tool.ruff.lint.extend-per-file-ignores]
-"tests/*" = ["D100", "D103", "ANN"]
+"tests/*" = ["D1", "ANN"]
 ```
 
+Notes about the [pydocstyle (D)](https://docs.astral.sh/ruff/rules/#pydocstyle-d) extension:
+
+- If you do not want to require docstrings for public functions, methods, classes, and modules
+  (e.g. when adding ruff to an existing codebase),
+  you can add the following to the `[tool.ruff.lint.extend-per-file-ignores]` section:
+
+  ```toml
+  "*" = ["D1"]
+  ```
+
+Notes about the [flake8-annotations (ANN)](https://docs.astral.sh/ruff/rules/#flake8-annotations-ann) extension:
+
+- Checks for missing type annotations, but does not perform static type checking (that's mypy's job).
+
+- Mypy also includes options for enforcing type annotations
+  (see [`disallow_untyped_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_untyped_defs)
+  and [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs)),
+  but we started using ruff's `ANN` extension before mypy, so we're sticking with `ANN` for now.
+
+- Feel free to remove this extension if you do not want to use static typing for your project.
+  Alternatively, you may want to enable the
+  [`ignore-fully-untyped`](https://docs.astral.sh/ruff/settings/#lint_flake8-annotations_ignore-fully-untyped) option
+  (similar to mypy's [`disallow_incomplete_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_incomplete_defs) option)
+  when adding the `ANN` extension to an existing codebase with large portions of untyped code.
+
 ### [`reusable-mypy.yml`](./.github/workflows/reusable-mypy.yml)
+
+> [!IMPORTANT]
+> You may want to review the [mypy docs](https://mypy.readthedocs.io/en/stable/),
+> particularly the [dynamic typing](https://mypy.readthedocs.io/en/stable/dynamic_typing.html) article
+> to learn more about the circumstances under which mypy treats your code as dynamically typed.
+>
+> Additionally, please review our [Mypy wiki article](https://github.com/ASFHyP3/.github/wiki/Mypy)
+> for configuration tips and troubleshooting beyond what's shown here.
 
 Runs [mypy](https://mypy-lang.org/) to perform static type checking for Python code. Use like:
 
@@ -270,14 +306,16 @@ on: push
 
 jobs:
   call-mypy-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.17.1
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
 We recommend pinning to an exact version of `mypy` in your project dependencies,
 because upgrading `mypy` may result in new type errors being reported.
 
-To use our recommended configuration options, add the following to `pyproject.toml`:
+To use our recommended configuration, add the following to `pyproject.toml`
+(you may want to review the available [config options](https://mypy.readthedocs.io/en/stable/config_file.html)
+to decide if our recommendations are appropriate for your project):
 
 <!-- When updating these options, please also update
      https://github.com/ASFHyP3/hyp3-cookiecutter/blob/develop/%7B%7Bcookiecutter.__project_name%7D%7D/pyproject.toml -->
@@ -298,23 +336,16 @@ disable_error_code = ["import-untyped"]
 Populate the
 [`python_version`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-python_version) field
 with the appropriate Python version in the format `MAJOR.MINOR`.
-This should probably be the minimum Python version supported by the project,
+We recommend setting this to the minimum Python version supported by your project,
 determined by the value of the
-[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field.
-For example, if `requires-python` specifies `>=3.10`, then you may want to set `python_version` to `3.10`, like this:
+[`requires-python`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#python-requires) field
+in `pyproject.toml`.
 
-```
-[project]
-requires-python = ">=3.10"
-
-...
-
-[tool.mypy]
-python_version = "3.10"
-```
-
-Note that you may need to enable additional options depending on the needs of your project.
-See our [Mypy](https://github.com/ASFHyP3/.github-private/wiki/Mypy) wiki article for configuration tips.
+If you want mypy to skip analyzing functions without type annotations
+(as described [here](https://mypy.readthedocs.io/en/stable/getting_started.html#getting-started-dynamic-vs-static)),
+you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
+Removing this option can be helpful when adding mypy to an existing codebase with large portions of untyped code,
+or if you simply want the ability to opt out of static type checking on a per-function basis.
 
 ### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
 
@@ -336,7 +367,7 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.17.1
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
@@ -366,7 +397,7 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.17.1
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -390,7 +421,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.17.1
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
@@ -419,7 +450,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.17.1
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -448,7 +479,7 @@ on:
   
 jobs:
   call-release-checklist-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.17.1
     permissions:
       pull-requests: write
     with:
@@ -478,7 +509,7 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.17.1
 ```
 to scan every push for secrets.
 
@@ -504,7 +535,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
     with:
       python_version: '3.12'        # Optional; default shown
 
