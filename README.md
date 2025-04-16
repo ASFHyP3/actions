@@ -28,6 +28,7 @@ jobs:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
     uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.18.0
+    permissions: {}
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -69,6 +70,8 @@ on:
 jobs:
   call-changelog-check-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
 to ensure the changelog has been updated for any PR to `develop` or `main`. 
@@ -87,6 +90,8 @@ on:
 jobs:
   call-create-jira-issue-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.18.0
+    permissions:
+      issues: write
     secrets:
       JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
@@ -140,12 +145,16 @@ on:
 jobs:
   call-version-info-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
     uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -181,12 +190,17 @@ on:
 jobs:
   call-version-info-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       conda_env_name: hyp3-plugin
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
     uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.18.0
+    permissions:
+      contents: read
+      packages: write
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
@@ -209,6 +223,8 @@ on: push
 jobs:
   call-ruff-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -307,6 +323,8 @@ on: push
 jobs:
   call-mypy-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -368,10 +386,13 @@ on:
 jobs:
   call-git-object-name-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.18.0
+    permissions:
+      contents: read
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - run: |
           echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
@@ -398,6 +419,8 @@ on:
 jobs:
   call-labeled-pr-check-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.18.0
+    permissions:
+      pull-requests: read
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -422,6 +445,8 @@ on:
 jobs:
   call-pytest-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
@@ -451,6 +476,7 @@ on:
 jobs:
   call-release-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.18.0
+    permissions: {}
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
@@ -510,6 +536,8 @@ on: push
 jobs:
   call-secrets-analysis-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 to scan every push for secrets.
 
@@ -536,12 +564,15 @@ on:
 jobs:
   call-version-info-workflow:
     uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       python_version: '3.12'        # Optional; default shown
 
   echo-version-info-outputs:
     needs: call-version-info-workflow
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - run: |
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"
