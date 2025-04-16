@@ -148,7 +148,7 @@ jobs:
     permissions:
       contents: read
     with:
-      conda_env_name: hyp3-plugin
+      python_version: '3.12'        # Optional; default shown
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
@@ -193,7 +193,7 @@ jobs:
     permissions:
       contents: read
     with:
-      conda_env_name: hyp3-plugin
+      python_version: '3.12'        # Optional; default shown
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
