@@ -13,8 +13,13 @@ consolidating the duplicated workflows across the ASFHyP3 organization.
 
 ### [`reusable-bump-version.yml`](./.github/workflows/reusable-bump-version.yml)
 
-Creates a new version tag for a repository based on Pull Request labels using bump2version. Use like:
+Creates a new version tag for a repository based on Pull Request labels using bump2version. Version tags are expected to
+follow [Semantic Versioning](https://semver.org/) and are of the form `v[major].[minor].[patch]`. This action will bump
+(increment) the part of current version based corresponding to the PR label (e.g., `major`, `minor`, `patch`, or
+`bumpless` to do nothing), and reset any lower parts to zero. If multiple part labels are attached to a PR, then this
+action will prefer the **biggest** bump.
 
+Use like:
 ```yaml
 name: Tag New Version
 
@@ -71,12 +76,20 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.18.0
 ```
 
-to ensure the changelog has been updated for any PR to `develop` or `main`. 
+to ensure the changelog has been updated for any PR to `develop` or `main`. For PRs that **do not** contain any changes
+that would require a version bump, and therefore **do not** need to be documented in the changelog, you can label the PR
+`bumpless` to skip this check.
 
 ### [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml)
 
-Creates a Jira issue that corresponds to the labeled GitHub issue. Use like:
+When an issue is labeled with a `Jira ` prefixed label, a Jira work item will be created of the corresponding type. The
+supported labels are:
+* `Jira Bug`
+* `Jira Spike`
+* `Jira Story`
+* `Jira Task`
 
+Use like:
 ```yaml
 name: Create Jira issue
 
@@ -380,7 +393,10 @@ This workflow is intended to be paired with workflows like the `reusable-docker-
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
-Ensures a PR has been appropriately labeled for a release. Use like:
+Ensures a PR has been labeled with exactly 1 of these labels: `major`, `minor`, `patch` or `bumpless` to support the
+`reusable-bump-version.yml` which is typically triggered by merging a PR to `main` (the release branch).
+
+Use like:
 
 ```yaml
 name: Is PR labeled?
@@ -490,7 +506,7 @@ jobs:
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-to add a comment to PRs when they are opened to the `main` branch.
+to add a comment to PRs when they are opened to the `main` (release) branch.
 
 
 ### [`reusable-secrets-analysis.yml`](./.github/workflows/reusable-secrets-analysis.yml)
