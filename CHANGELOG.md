@@ -17,6 +17,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Removed unnecessary `actions/checkout` step from [`reusable-release-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) so that it does not require the `contents: read` permission for private repos.
 - Replaced the `conda_env_name` input parameter with `python_version` for the `reusable-version-info` job in the docker build README examples.
+- The use or requirements of GitHub issue/pull request labels in the reusable workflows are now described in the README. 
 
 ## [0.18.0]
 
