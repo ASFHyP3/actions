@@ -481,7 +481,7 @@ jobs:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
       develop_branch: develop   # Optional; default shown
-      sync_pr_label: tools-bot  # Optional; default shown
+      sync_pr_label: bumpless   # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
