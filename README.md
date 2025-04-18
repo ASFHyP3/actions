@@ -13,8 +13,13 @@ consolidating the duplicated workflows across the ASFHyP3 organization.
 
 ### [`reusable-bump-version.yml`](./.github/workflows/reusable-bump-version.yml)
 
-Creates a new version tag for a repository based on Pull Request labels using bump2version. Use like:
+Creates a new version tag for a repository based on Pull Request labels using bump2version. Version tags are expected to
+follow [Semantic Versioning](https://semver.org/) and are of the form `v[major].[minor].[patch]`. This action will bump
+(increment) the part of the current version corresponding to the PR label (e.g., `major`, `minor`, `patch`, or
+`bumpless` to do nothing), and reset any lower parts to zero. If multiple part labels are attached to a PR, then this
+action will prefer the **biggest** bump.
 
+Use like:
 ```yaml
 name: Tag New Version
 
@@ -27,7 +32,8 @@ jobs:
   call-bump-version-workflow:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.18.0
+    permissions: {}
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
@@ -68,15 +74,25 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
-to ensure the changelog has been updated for any PR to `develop` or `main`. 
+to ensure the changelog has been updated for any PR to `develop` or `main`. For PRs that **do not** contain any changes
+that would require a version bump, and therefore **do not** need to be documented in the changelog, you can label the PR
+`bumpless` to skip this check.
 
 ### [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml)
 
-Creates a Jira issue that corresponds to the labeled GitHub issue. Use like:
+When an issue is labeled with a `Jira ` prefixed label, a Jira work item will be created of the corresponding type. The
+supported labels are:
+* `Jira Bug`
+* `Jira Spike`
+* `Jira Story`
+* `Jira Task`
 
+Use like:
 ```yaml
 name: Create Jira issue
 
@@ -86,7 +102,9 @@ on:
 
 jobs:
   call-create-jira-issue-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.18.0
+    permissions:
+      issues: write
     secrets:
       JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
       JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
@@ -139,13 +157,17 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
-      conda_env_name: hyp3-plugin
+      python_version: '3.12'        # Optional; default shown
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
@@ -180,13 +202,18 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
-      conda_env_name: hyp3-plugin
+      python_version: '3.12'        # Optional; default shown
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.18.0
+    permissions:
+      contents: read
+      packages: write
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
@@ -208,7 +235,9 @@ on: push
 
 jobs:
   call-ruff-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -306,7 +335,9 @@ on: push
 
 jobs:
   call-mypy-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -367,11 +398,14 @@ on:
 
 jobs:
   call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.18.0
+    permissions:
+      contents: read
   
   echo-git-object-name-outputs:
     needs: call-git-object-name-workflow
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - run: |
           echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
@@ -380,7 +414,10 @@ This workflow is intended to be paired with workflows like the `reusable-docker-
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
-Ensures a PR has been appropriately labeled for a release. Use like:
+Ensures a PR has been labeled with exactly 1 of these labels: `major`, `minor`, `patch` or `bumpless` to support the
+`reusable-bump-version.yml` which is typically triggered by merging a PR to `main` (the release branch).
+
+Use like:
 
 ```yaml
 name: Is PR labeled?
@@ -397,7 +434,9 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.18.0
+    permissions:
+      pull-requests: read
 ```
 to ensure a release label is included on any PR to `main`.
 
@@ -421,7 +460,9 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       local_package_name: hyp3_plugin  # Required; package to produce a coverage report for
       fail_fast: false      # Optional; default shown
@@ -450,12 +491,13 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.18.0
+    permissions: {}
     with:
       release_prefix: HyP3-CI
       release_branch: main      # Optional; default shown
       develop_branch: develop   # Optional; default shown
-      sync_pr_label: tools-bot  # Optional; default shown
+      sync_pr_label: bumpless   # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
@@ -479,7 +521,7 @@ on:
   
 jobs:
   call-release-checklist-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.18.0
     permissions:
       pull-requests: write
     with:
@@ -490,7 +532,7 @@ jobs:
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-to add a comment to PRs when they are opened to the `main` branch.
+to add a comment to PRs when they are opened to the `main` (release) branch.
 
 
 ### [`reusable-secrets-analysis.yml`](./.github/workflows/reusable-secrets-analysis.yml)
@@ -509,7 +551,9 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.18.0
+    permissions:
+      contents: read
 ```
 to scan every push for secrets.
 
@@ -535,13 +579,16 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.17.1
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.18.0
+    permissions:
+      contents: read
     with:
       python_version: '3.12'        # Optional; default shown
 
   echo-version-info-outputs:
     needs: call-version-info-workflow
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - run: |
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"

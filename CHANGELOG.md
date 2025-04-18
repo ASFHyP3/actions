@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.1]
+
+### Added
+- Added `permissions` field for every job in the README examples to address https://github.com/ASFHyP3/actions/issues/220
+
+### Changed
+- Changed the default value for the `reusable-release.yml` workflow's `sync_pr_label` input from `tools-bot` to `bumpless`.
+
+### Fixed
+- Removed unnecessary `actions/checkout` step from [`reusable-release-checklist-comment.yml`](.github/workflows/reusable-release-checklist-comment.yml) so that it does not require the `contents: read` permission for private repos.
+- Replaced the `conda_env_name` input parameter with `python_version` for the `reusable-version-info` job in the docker build README examples.
+- The use or requirements of GitHub issue/pull request labels in the reusable workflows are now described in the README. 
+
 ## [0.18.0]
 
 ### Added
