@@ -14,7 +14,7 @@ on:
         type: string
       sync_pr_label:
         required: false
-        default: tools-bot
+        default: bumpless
         type: string
     secrets:
       USER_TOKEN:
