@@ -15,7 +15,7 @@ consolidating the duplicated workflows across the ASFHyP3 organization.
 
 Creates a new version tag for a repository based on Pull Request labels using bump2version. Version tags are expected to
 follow [Semantic Versioning](https://semver.org/) and are of the form `v[major].[minor].[patch]`. This action will bump
-(increment) the part of current version based corresponding to the PR label (e.g., `major`, `minor`, `patch`, or
+(increment) the part of the current version corresponding to the PR label (e.g., `major`, `minor`, `patch`, or
 `bumpless` to do nothing), and reset any lower parts to zero. If multiple part labels are attached to a PR, then this
 action will prefer the **biggest** bump.
 
