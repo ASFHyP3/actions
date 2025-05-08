@@ -138,7 +138,7 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with either the `reusable-version-info.yml` workflow or the `reusable-git-object-name.yml` workflow. This workflow will
+with the specified version tag, and is best paired with either the `reusable-version-info.yml` workflow. This workflow will
 additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
 Use like:
 
@@ -377,40 +377,6 @@ If you want mypy to skip analyzing functions without type annotations
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
 Removing this option can be helpful when adding mypy to an existing codebase with large portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
-
-### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
-
-Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
-of the calling repository. Use like:
-
-```yaml
-name: Build
-
-on:
-  push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
-
-jobs:
-  call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.18.1
-    permissions:
-      contents: read
-  
-  echo-git-object-name-outputs:
-    needs: call-git-object-name-workflow
-    runs-on: ubuntu-latest
-    permissions: {}
-    steps:
-      - run: |
-          echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
-```
-This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
