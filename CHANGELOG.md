@@ -8,6 +8,40 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.19.0]
 
+### Added
+- The `reusable-docker-ecr.yml` workflow now accepts a `file` input for specifying the name of the dockerfile to build.
+
+### Changed
+- The `update-examples.yml` workflow no longer used the `reusable-git-object-name.yml` workflow.
+- The `reusable-docker-ecr.yml` and `reusable-docker-ghcr.yml` workflows have changed substantially! These workflows are now version-centric instead of branch-centric and their usage has changed. Please make these changes to any calling workflow:
+  ```diff
+   on:
+     push:
+       branches:
+  -      - main
+         - develop
+  +    tags:
+  +      - 'v*'
+     pull_request:
+       branches:
+         - main
+         - develop
+  ```
+
+  and:
+  ```diff
+       uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.19.0
+       ...
+       with:
+  -      release_branch: main
+         ...
+  ```
+
+  For current usage, see the [README](README.md) and for more details about these changes, see https://github.com/ASFHyP3/actions/pull/288.
+
+### Fixed
+- `latest` tagged docker images will now be applied to release-tagged images correctly.
+
 ### Removed
 - The `reusable-git-object-name.yml` workflow has been removed. We recommend using the `reusable-version-info.yml` workflow instead.
 
