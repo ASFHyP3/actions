@@ -64,14 +64,14 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Add test tag
-        if: ${{ github.event_name != 'pull_request' && contains('.dev', inputs.version_tag) }}
+        if: ${{ github.event_name != 'pull_request' && contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           dst: ghcr.io/${{ env.REPO }}:test
 
       - name: Add latest tag
-        if: ${{ github.event_name != 'pull_request' && ! contains('.dev', inputs.version_tag) }}
+        if: ${{ github.event_name != 'pull_request' && ! contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
