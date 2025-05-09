@@ -11,10 +11,6 @@ on:
         required: false
         default: us-west-2
         type: string
-      develop_branch:
-        required: false
-        default: develop
-        type: string
       file:
         required: false
         default: Dockerfile

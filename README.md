@@ -176,7 +176,6 @@ jobs:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
-      develop_branch: develop  # Optional; default shown
       file: Dockerfile         # Optional; default shown
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -227,7 +226,6 @@ jobs:
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
-      develop_branch: develop  # Optional; default shown
       file: Dockerfile # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}

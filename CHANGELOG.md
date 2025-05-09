@@ -34,6 +34,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
        ...
        with:
   -      release_branch: main
+  -      develop_branch: develop
          ...
   ```
 
