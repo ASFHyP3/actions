@@ -238,6 +238,9 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.18.1
     permissions:
       contents: read
+    with:
+      runner: ubuntu-latest # Optional; default shown
+
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
@@ -338,6 +341,8 @@ jobs:
     uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.18.1
     permissions:
       contents: read
+    with:
+      runner: ubuntu-latest # Optional; default shown
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
