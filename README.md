@@ -240,7 +240,6 @@ jobs:
       contents: read
     with:
       runner: ubuntu-latest # Optional; default shown
-
 ```
 
 Runs inside a mamba environment and assumes the presence of an `environment.yml` file.
