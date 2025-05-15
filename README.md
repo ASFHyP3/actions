@@ -138,11 +138,11 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with either the `reusable-version-info.yml` workflow. This workflow will
-additionally push the image with a `latest` and `test` tag for releases and pushes to the develop branch, respectively.
+with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 > [!WARNING]
-> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the latest tag to
+> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
 > all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
 
 ```yaml
@@ -187,10 +187,10 @@ jobs:
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
-additionally push the image with a `latest` and `test` tag for releases and pushes to the develop branch, respectively.
+additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 > [!WARNING]
-> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the latest tag to
+> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
 > all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
 
 Use like:
