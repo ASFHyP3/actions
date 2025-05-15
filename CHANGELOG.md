@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.19.0]
+## [0.20.0]
 
 ### Added
 - The `reusable-docker-ecr.yml` workflow now accepts a `file` input for specifying the name of the dockerfile to build.
@@ -45,6 +45,11 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 - The `reusable-git-object-name.yml` workflow has been removed. We recommend using the `reusable-version-info.yml` workflow instead.
+
+## [0.19.0]
+
+### Added
+- Added an optional `runner` input for [`reusable-ruff`](.github/workflows/reusable-ruff.yml) and [`reusable-mypy`](.github/workflows/reusable-mypy.yml) to allow specifying a custom GitHub Actions runner. Helps to address https://github.com/ASFHyP3/hyp3-testing/issues/128
 
 ## [0.18.1]
 
