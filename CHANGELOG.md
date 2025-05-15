@@ -41,7 +41,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   For current usage, see the [README](README.md) and for more details about these changes, see https://github.com/ASFHyP3/actions/pull/288.
 
 ### Fixed
-- `latest` tagged docker images will now be applied to release-tagged images correctly.
+- `latest` tag will now be applied to release-tagged Docker images correctly. Fixes https://github.com/ASFHyP3/actions/issues/278
 
 ### Removed
 - The `reusable-git-object-name.yml` workflow has been removed. We recommend using the `reusable-version-info.yml` workflow instead.
