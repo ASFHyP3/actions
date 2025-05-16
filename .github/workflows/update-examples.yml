@@ -12,11 +12,7 @@ on:
       - v*
 
 jobs:
-  call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.18.1
-
-  upate_actions_examples:
-    needs: call-git-object-name-workflow
+  update-actions-examples:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +22,8 @@ jobs:
       - name: Get version number
         env:
            INPUT_VERSION: ${{ github.event.inputs.version }}
-           OBJECT_VERSION: ${{ needs.call-git-object-name-workflow.outputs.name }}
         run: |
+          OBJECT_VERSION=$(git describe --dirty --tags --long --match "*[0-9]*")
           if [[ -z "${INPUT_VERSION}" ]]; then
             echo "ACTIONS_VERSION=${OBJECT_VERSION%%-*}" >> $GITHUB_ENV
           else

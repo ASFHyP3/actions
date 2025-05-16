@@ -138,9 +138,12 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with either the `reusable-version-info.yml` workflow or the `reusable-git-object-name.yml` workflow. This workflow will
-additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
-Use like:
+with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+> [!WARNING]
+> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
+> all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
 
 ```yaml
 name: Build
@@ -148,8 +151,9 @@ name: Build
 on:
   push:
     branches:
-      - main
       - develop
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -172,8 +176,7 @@ jobs:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
-      release_branch: main     # Optional; default shown
-      develop_branch: develop  # Optional; default shown
+      file: Dockerfile         # Optional; default shown
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -183,8 +186,13 @@ jobs:
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow or the `reusable-git-object-name.yml` workflow. This workflow will
-additionally push the image with a `latest` and `test` tag for merges to the release and develop branch, respectively.
+with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+> [!WARNING]
+> This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
+> all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
+
 Use like:
 
 ```yaml
@@ -193,8 +201,9 @@ name: Build
 on:
   push:
     branches:
-      - main
       - develop
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -217,8 +226,6 @@ jobs:
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
-      release_branch: main     # Optional; default shown
-      develop_branch: develop  # Optional; default shown
       file: Dockerfile # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -381,40 +388,6 @@ If you want mypy to skip analyzing functions without type annotations
 you should remove the [`check_untyped_defs`](https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-check-untyped-defs) option.
 Removing this option can be helpful when adding mypy to an existing codebase with large portions of untyped code,
 or if you simply want the ability to opt out of static type checking on a per-function basis.
-
-### [`reusable-git-object-name.yml`](./.github/workflows/reusable-git-object-name.yml)
-
-Outputs the human-readable git object name from [`git describe --dirty --tags --long --match "*[0-9]*"`](https://git-scm.com/docs/git-describe)
-of the calling repository. Use like:
-
-```yaml
-name: Build
-
-on:
-  push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
-
-jobs:
-  call-git-object-name-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-git-object-name.yml@v0.19.0
-    permissions:
-      contents: read
-  
-  echo-git-object-name-outputs:
-    needs: call-git-object-name-workflow
-    runs-on: ubuntu-latest
-    permissions: {}
-    steps:
-      - run: |
-          echo "name: ${{ needs.call-git-object-name-workflow.outputs.name }}"
-```
-This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
 
 ### [`reusable-labeled-pr-check.yml`](./.github/workflows/reusable-labeled-pr-check.yml)
 
