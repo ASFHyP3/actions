@@ -11,19 +11,19 @@ on:
         required: false
         default: us-west-2
         type: string
-      release_branch:
+      file:
         required: false
-        default: main
-        type: string
-      develop_branch:
-        required: false
-        default: develop
+        default: Dockerfile
         type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+
+concurrency:
+  group: ${{ inputs.version_tag }}
+  cancel-in-progress: true
 
 jobs:
   dockerize:
@@ -57,7 +57,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          file: ./${{ inputs.file }}
+          push: ${{ ! github.event.pull_request.head.repo.fork }}
           tags: |
             ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
           labels: |
@@ -66,14 +67,14 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Add test tag
-        if: github.ref == format('refs/heads/{0}', inputs.develop_branch)
+        if: ${{ github.event_name != 'pull_request' && contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
           src: ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
           dst: ${{ inputs.ecr_registry }}/${{ env.REPO }}:test
 
       - name: Add latest tag
-        if: github.ref == format('refs/heads/{0}', inputs.release_branch)
+        if: ${{ github.event_name != 'pull_request' && ! contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
           src: ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
