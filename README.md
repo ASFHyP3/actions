@@ -417,6 +417,35 @@ jobs:
 ```
 to ensure a release label is included on any PR to `main`.
 
+### [`reusable-pypi.yml`](./.github/workflows/reusable-pypi.yml)
+
+Run [Python Build](https://github.com/pypa/build) to create source and binary (wheel) distributions of your package and
+then upload them to [PyPI.org](https://pypi.org). This action assumes projects are using a `pyroject.toml` with a modern
+build backend and support build isolation. This action, following [PyPA's recommendation](https://build.pypa.io/en/stable/#python--m-build),
+will build a source distribution (sdist) from the project and then build a binary distribution (wheel) from the sdist. 
+
+Use like:
+
+```yaml
+name: Build and Distribute to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  call-pypi-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pypi.yml@v0.21.0
+    permissions:
+      contents: read
+    with:
+      python_version: '3.x'  # Optional; default shown
+    secrets:
+      PYPI_TOKEN: ${{ secrets.TOOLS_PYPI_PAK }}
+```
+to build and distribute your package for every newly pushed version tag.
+
 ### [`reusable-pytest.yml`](./.github/workflows/reusable-pytest.yml)
 
 Runs [pytest](https://docs.pytest.org/en/6.2.x/) and [pytest-cov](https://pypi.org/project/pytest-cov/). Requires an `environment.yml` file at the root of the calling
@@ -447,7 +476,7 @@ jobs:
         ["3.9", "3.10", "3.11", "3.12"]
 ```
 
-to test your Python package and produce a coverage report for. Importantly, `python_versions` *must* be a valid JSON string
+to test your Python package and produce a coverage report. Importantly, `python_versions` *must* be a valid JSON string
 containing a list of python version strings.
 
 ### [`reusable-release.yml`](./.github/workflows/reusable-release.yml)
