@@ -31,6 +31,6 @@ jobs:
           python -m build
 
       - name: upload to PyPI.org
-        uses: pypa/gh-action-pypi-publish@v1
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_TOKEN }}
