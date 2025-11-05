@@ -27,7 +27,6 @@ jobs:
           python -m pip install --upgrade build
 
       - name: Build distribution
-        id: build
         run: |
           python -m build
 
