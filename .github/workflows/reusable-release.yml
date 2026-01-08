@@ -16,6 +16,11 @@ on:
         required: false
         default: bumpless
         type: string
+      fast_forward_develop:
+        required: false
+        default: true
+        type: boolean
+
     secrets:
       USER_TOKEN:
         required: true
@@ -37,6 +42,7 @@ jobs:
           ALLOW_TAG_PREFIX: true
 
       - name: Attempt fast-forward develop from release
+        if: ${{ inputs.fast_forward_develop }}
         run: |
           git fetch --prune
           git checkout ${{ inputs.develop_branch }} && git pull --ff-only
@@ -44,7 +50,7 @@ jobs:
           git push
 
       - name: On failure, open PR to bring release back to develop
-        if: ${{ failure() }}
+        if: ${{ failure() && inputs.fast_forward_develop }}
         env:
           PR_TITLE: Pulling ${{ github.ref }} into ${{ inputs.develop_branch }}
           PR_BODY: Fast-forward of ${{ inputs.release_branch }} to ${{ inputs.develop_branch }} failed!

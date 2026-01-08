@@ -487,6 +487,7 @@ Creates a release from a `CHANGELOG.md` file and synchronize the release and dev
 
 Use like:
 
+TODO: document `fast_forward_develop` option
 ```yaml
 name: Create Release
 
