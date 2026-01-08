@@ -41,6 +41,8 @@ jobs:
       USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
 ```
 
+TODO: update to use `GITHUB_TOKEN` if it works for `nisar-docs`
+
 To tag a new version on any merge to `main`. This workflow uses the optional 'user' and 'email' inputs, and the required
 [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 `USER_TOKEN` to define the user who will be creating and pushing the version tag.
