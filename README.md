@@ -487,7 +487,7 @@ Creates a release from a `CHANGELOG.md` file and synchronize the release and dev
 
 Use like:
 
-TODO: document `fast_forward_develop` option
+TODO: document `fast_forward_develop` option and using `secrets.GITHUB_TOKEN` and adding `permissions`
 ```yaml
 name: Create Release
 
