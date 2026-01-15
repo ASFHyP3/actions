@@ -33,17 +33,17 @@ jobs:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
     uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.21.0
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: read
     with:
       user: tools-bot                # Optional; default shown
       email: UAF-asf-apd@alaska.edu  # Optional; default shown
     secrets:
-      USER_TOKEN: ${{ secrets.TOOLS_BOT_PAK }}
+      USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-To tag a new version on any merge to `main`. This workflow uses the optional 'user' and 'email' inputs, and the required
-[personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-`USER_TOKEN` to define the user who will be creating and pushing the version tag.
+To tag a new version on any merge to `main`. This workflow uses the optional 'user' and 'email' inputs.
 
 For this workflow to run successfully, there must be an annotated tag for the current version number.
 When adding this workflow to a new repo, you should create a `v0.0.0` tag by running the following commands,
