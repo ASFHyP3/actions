@@ -12,7 +12,7 @@ jobs:
       actions: write
     steps:
       - name: Bump Actions version in HyP3 Cookiecutter
-        uses: benc-uk/workflow-dispatch@v1.2
+        uses: benc-uk/workflow-dispatch@v1.3
         with:
           workflow: update_actions_version.yml
           token: ${{ secrets.TOOLS_BOT_PAK }}
