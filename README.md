@@ -85,6 +85,9 @@ that would require a version bump, and therefore **do not** need to be documente
 
 ### [`reusable-create-jira-issue.yml`](./.github/workflows/reusable-create-jira-issue.yml)
 
+> [!WARNING]
+> Atlassian has deprecated the `gajira` actions used in this workflow, so it may eventually break without warning. See https://github.com/ASFHyP3/actions/issues/324 for more information.
+
 When an issue is labeled with a `Jira ` prefixed label, a Jira work item will be created of the corresponding type. The
 supported labels are:
 * `Jira Bug`
