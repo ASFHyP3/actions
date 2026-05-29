@@ -10,6 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - The `reusable-create-jira-issue` workflow no longer updated the github issue with a link to the jira issue. Fixes #328.
+- Updates action dependencies to Node 24 compatible versions where available
 
 ## [0.21.0]
 
