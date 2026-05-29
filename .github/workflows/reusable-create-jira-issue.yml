@@ -39,14 +39,3 @@ jobs:
           summary: ${{ github.event.issue.title }}
           description: ${{ github.event.issue.html_url }}
           fields: '${{ secrets.JIRA_FIELDS }}'
-
-      - name: Add Jira issue key to GitHub issue body
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: update-issue
-          body: "<!-- WARNING: The following lines were added by create-jira-issue, please do not modify! -->\n\
-            **Jira:** ${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create_jira_issue.outputs.issue }}\n\n\
-            *Note: The above link is accessible only to members of ASF.*\n\n\
-            ----------------------------------------------------------------------------------------------------\n\
-            <!-- WARNING: The preceding lines were added by create-jira-issue, please do not modify! -->\n\n\
-            ${{ github.event.issue.body }}"
