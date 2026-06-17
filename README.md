@@ -174,15 +174,15 @@ jobs:
     needs: call-version-info-workflow
     uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.21.1
     permissions:
+      id-token: write
       contents: read
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
-      file: Dockerfile         # Optional; default shown
+      file: Dockerfile         # Optional; default show
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
 ```
 
 ### [`reusable-docker-ghcr.yml`](./.github/workflows/reusable-docker-ghcr.yml)
