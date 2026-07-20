@@ -24,7 +24,7 @@ jobs:
   dockerize:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -61,14 +61,14 @@ jobs:
 
       - name: Add test tag
         if: ${{ github.event_name != 'pull_request' && contains(inputs.version_tag, '.dev') }}
-        uses: akhilerm/tag-push-action@v2.2.0
+        uses: akhilerm/tag-push-action@v2.3.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           dst: ghcr.io/${{ env.REPO }}:test
 
       - name: Add latest tag
         if: ${{ github.event_name != 'pull_request' && ! contains(inputs.version_tag, '.dev') }}
-        uses: akhilerm/tag-push-action@v2.2.0
+        uses: akhilerm/tag-push-action@v2.3.0
         with:
           src: ghcr.io/${{ env.REPO }}:${{ inputs.version_tag }}
           dst: ghcr.io/${{ env.REPO }}:latest
