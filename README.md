@@ -144,6 +144,10 @@ Builds a Docker image from the `Dockerfile` in the repository root and pushes it
 with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
+This workflow outputs:
+- `image_registry`: the image the docker image repository, including the image registry
+- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
+
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
 > all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
@@ -176,13 +180,26 @@ jobs:
     permissions:
       contents: read
     with:
+      fetch_depth: 0          # Optional; default shown
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
       file: Dockerfile         # Optional; default shown
+      provenance: true         # Optional; default shown
+      platforms: ''            # Optional; default shown
+      build_args: ''           # Optional; default shown
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ecr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ecr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-docker-ghcr.yml`](./.github/workflows/reusable-docker-ghcr.yml)
@@ -191,6 +208,10 @@ Builds a Docker image from the `Dockerfile` in the repository root and pushes it
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+This workflow outputs:
+- `image_registry`: the image the docker image repository, including the image registry
+- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
@@ -229,9 +250,22 @@ jobs:
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
-      file: Dockerfile # Optional; default shown
+      fetch_depth: 0      # Optional; default shown
+      file: Dockerfile    # Optional; default shown
+      provenance: true    # Optional; default shown
+      platforms: ''       # Optional; default shown
+      build_args: ''      # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ghcr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ghcr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
