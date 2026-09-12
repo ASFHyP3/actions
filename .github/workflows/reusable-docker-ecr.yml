@@ -1,6 +1,11 @@
 on:
   workflow_call:
     inputs:
+      fetch_depth:
+        description: 'Number of commits to fetch. 0 indicates all history for all branches and tags.'
+        required: false
+        default: 0
+        type: string
       version_tag:
         required: true
         type: string
@@ -15,6 +20,26 @@ on:
         required: false
         default: Dockerfile
         type: string
+      provenance:
+        required: false
+        default: true
+        type: boolean
+      platforms:
+        description: Comma-separated list of target platforms for build
+        required: false
+        type: string
+      build_args:
+        description: New-line-separated list of docker build arguments like "arg=value"
+        required: false
+        type: string
+    outputs:
+      outputs:
+        image_repository:
+          description: "Image repository docker image was pushed to"
+          value: ${{ jobs.dockerize.outputs.image_repository }}
+        image_uri:
+          description: "Full URI of docker image tagged with input version tag"
+          value: ${{ jobs.dockerize.outputs.image_uri }}
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -28,17 +53,29 @@ concurrency:
 jobs:
   dockerize:
     runs-on: ubuntu-latest
+    outputs:
+      image_repository: ${{ steps.set_outputs.outputs.IMAGE_REPOSITORY }}
+      image_uri: ${{ steps.set_outputs.outputs.IMAGE_URI }}
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: ${{ inputs.fetch_depth }}
 
-      - name: set environment variables
+      - name: set environment variables and outputs
+        id: set_outputs
         run: |
           echo "CI_JOB_TIMESTAMP=$(date --utc --rfc-3339=seconds)" >> $GITHUB_ENV
+          export IMAGE_REPOSITORY=${{ inputs.ecr_registry }}/${GITHUB_REPOSITORY,,}
+          echo "IMAGE_REPOSITORY=${IMAGE_REPOSITORY}" >> ${GITHUB_ENV}
+          echo "IMAGE_REPOSITORY=${IMAGE_REPOSITORY}" >> ${GITHUB_OUTPUT}
+          export IMAGE_URI=${IMAGE_REPOSITORY}:${VERSION_TAG}
+          echo "IMAGE_URI=${IMAGE_URI}" >> ${GITHUB_ENV}
+          echo "IMAGE_URI=${IMAGE_URI}" >> ${GITHUB_OUTPUT}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+        with:
+          platforms: ${{ inputs.platforms }}
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -49,18 +86,17 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Lowercase repo for container registry
-        run: |
-          echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
-
       - name: Build, tag, and push image to Amazon ECR
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./${{ inputs.file }}
+          build-args: ${{ inputs.build_args }}
           push: ${{ ! github.event.pull_request.head.repo.fork }}
+          platforms: ${{ inputs.platforms }}
+          provenance: ${{ inputs.provenance }}
           tags: |
-            ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
+            ${{ env.IMAGE_URI }}
           labels: |
             org.opencontainers.image.created=${{ env.CI_JOB_TIMESTAMP }}
             org.opencontainers.image.version=${{ inputs.version_tag }}
@@ -70,15 +106,15 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
-          src: ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
-          dst: ${{ inputs.ecr_registry }}/${{ env.REPO }}:test
+          src: ${{ env.IMAGE_URI }}
+          dst: ${{ env.IMAGE_REPOSITORY }}:test
 
       - name: Add latest tag
         if: ${{ github.event_name != 'pull_request' && ! contains(inputs.version_tag, '.dev') }}
         uses: akhilerm/tag-push-action@v2.2.0
         with:
-          src: ${{ inputs.ecr_registry }}/${{ env.REPO }}:${{ inputs.version_tag }}
-          dst: ${{ inputs.ecr_registry }}/${{ env.REPO }}:latest
+          src: ${{ env.IMAGE_URI }}
+          dst: ${{ env.IMAGE_REPOSITORY }}:latest
 
       - name: Logout of Amazon ECR
         if: always()

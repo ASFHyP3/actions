@@ -6,10 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [PEP 440](https://www.python.org/dev/peps/pep-0440/) 
 and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0]
+
+### Added
+- The reusable docker workflows (AWS ECR and GHCR) now accept these new optional inputs:
+  - `fetch_depth`, to specify the number of commits fetched when checking out
+  - `provenance`, to specify whether to generate provenance attestations for the build or not
+  - `platforms`, a comma-separated list of target platforms to build for
+  - `build_args`, a new-line separated list of docker build arguments like "arg=value"
+  The default values of these arguments a set to maintain backwards compatibility of this workflow.
+- The reusable docker workflows now provide these outputs:
+  - `image_repository`, the image repository the docker image was pushed to and includes the image registry
+  - `image_uri`, the full URI of the docker image including the image registry, repository, and tag
+
 ## [0.21.1]
 
 ### Added
-- The `reusable-create-jira-issue` workflow no longer updated the github issue with a link to the jira issue. Fixes #328.
+- The `reusable-create-jira-issue` workflow no longer updated the GitHub issue with a link to the jira issue. Fixes #328.
 - Updates action dependencies to Node 24 compatible versions where available
 
 ## [0.21.0]
