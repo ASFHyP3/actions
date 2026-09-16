@@ -19,6 +19,9 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `image_repository`, the image repository the docker image was pushed to and includes the image registry
   - `image_uri`, the full URI of the docker image including the image registry, repository, and tag
 
+### Changed
+- The reusable docker workflows (AWS ECR and GHCR) will now only add `test` and `latest` image tags when the calling event is a `push` event, instead of doing so for any not `pull_request` event, allowing `workflow_dispatch` events to build images without potentially clobbering the `test` or `latest` tag.
+
 ## [0.21.1]
 
 ### Added
