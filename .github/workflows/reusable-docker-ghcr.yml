@@ -30,13 +30,12 @@ on:
         required: false
         type: string
     outputs:
-      outputs:
-        image_repository:
-          description: "Image repository docker image was pushed to"
-          value: ${{ jobs.dockerize.outputs.image_repository }}
-        image_uri:
-          description: "Full URI of docker image tagged with input version tag"
-          value: ${{ jobs.dockerize.outputs.image_uri }}
+      image_repository:
+        description: "Image repository docker image was pushed to"
+        value: ${{ jobs.dockerize.outputs.image_repository }}
+      image_uri:
+        description: "Full URI of docker image tagged with input version tag"
+        value: ${{ jobs.dockerize.outputs.image_uri }}
     secrets:
       USER_TOKEN:
         required: true
