@@ -62,6 +62,8 @@ jobs:
 
       - name: set environment variables and outputs
         id: set_outputs
+        env:
+          VERSION_TAG: ${{ inputs.version_tag }}
         run: |
           echo "CI_JOB_TIMESTAMP=$(date --utc --rfc-3339=seconds)" >> $GITHUB_ENV
           export IMAGE_REPOSITORY=${{ inputs.ecr_registry }}/${GITHUB_REPOSITORY,,}
