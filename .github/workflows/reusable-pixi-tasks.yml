@@ -11,6 +11,12 @@ on:
         description: JSON string containing the list of pixi tasks to run
         required: true
         type: string
+      fail_fast:
+        required: false
+        default: false
+        description: Cancel all in-progress and queued tasks if any task in the matrix fails
+        type: boolean
+
 
 jobs:
   pixi-tasks:
