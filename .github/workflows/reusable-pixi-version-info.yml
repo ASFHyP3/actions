@@ -1,0 +1,36 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: false
+        default: default
+        type: string
+    outputs:
+      version:
+        value: ${{ jobs.version_info.outputs.version }}
+      version_tag:
+        value: ${{ jobs.version_info.outputs.version_tag }}
+
+
+jobs:
+  version_info:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_outputs.outputs.version }}
+      version_tag: ${{ steps.set_outputs.outputs.version_tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          activate-environment: ${{ inputs.environment }}
+
+      - name: set outputs
+        id: set_outputs
+        run: |
+          export SDIST_VERSION=$(python -m setuptools_scm)
+          echo "version=${SDIST_VERSION}" >> $GITHUB_OUTPUT
+          echo "version_tag=${SDIST_VERSION/+/_}" >> $GITHUB_OUTPUT
+          echo "Version number: ${SDIST_VERSION}"
