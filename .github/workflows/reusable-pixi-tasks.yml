@@ -1,0 +1,32 @@
+on:
+  workflow_call:
+    inputs:
+      environments:
+        description: JSON string containing the list of pixi environments to run tasks in
+        required: false
+        default: >-
+          ["default"]
+        type: string
+      tasks:
+        description: JSON string containing the list of pixi tasks to run
+        required: true
+        type: string
+
+jobs:
+  pixi-tasks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: ${{ inputs.fail_fast }}
+      matrix:
+        environment: ${{ fromJson(inputs.environments) }}
+        task: ${{ fromJson(inputs.tasks) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          environments: ${{ matrix.environment }}
+
+      - name: Run pixi task
+        run: |
+          pixi run -e ${{ matrix.environment }} ${{ matrix.task }}
