@@ -148,6 +148,9 @@ This workflow outputs:
 - `image_registry`: the image the docker image repository, including the image registry
 - `image_uri`: the full URI of the docker image including the image registry, repository, and tag
 
+> [!TIP]
+> This workflow uses [GitHub's OIDC provider](https://github.com/aws-actions/configure-aws-credentials#oidc-configuration-details) to get the short-lived AWS credentials needed for this action. If you're using this action to push images into an AWS account with a HyP3 deployment, the AWS IAM configuration is likely managed as part of the [hyp3-ci stack](https://github.com/ASFHyP3/hyp3#enable-cicd). 
+
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
 > all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
@@ -180,10 +183,11 @@ jobs:
     permissions:
       contents: read
     with:
-      fetch_depth: 0          # Optional; default shown
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
-      ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
+      role_to_assume: arn:aws:iam::123456789100:role/my-github-actions-role
+      ecr_registry: 123456789100.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
+      fetch_depth: 0           # Optional; default shown
       file: Dockerfile         # Optional; default shown
       provenance: true         # Optional; default shown
       platforms: ''            # Optional; default shown

@@ -20,6 +20,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `image_uri`, the full URI of the docker image including the image registry, repository, and tag
 
 ### Changed
+- :warning: The reusable docker AWS ECR workflow now uses OIDC for authentication.
 - The reusable docker workflows (AWS ECR and GHCR) will now only add `test` and `latest` image tags when the calling event is a `push` event, instead of doing so for any not `pull_request` event, allowing `workflow_dispatch` events to build images without potentially clobbering the `test` or `latest` tag.
 
 ## [0.21.1]
