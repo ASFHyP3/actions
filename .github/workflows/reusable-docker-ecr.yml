@@ -9,6 +9,9 @@ on:
       version_tag:
         required: true
         type: string
+      role_to_assume:
+        required: true
+        type: string
       ecr_registry:
         required: true
         type: string
@@ -39,11 +42,6 @@ on:
       image_uri:
         description: "Full URI of docker image tagged with input version tag"
         value: ${{ jobs.dockerize.outputs.image_uri }}
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
 
 concurrency:
   group: ${{ inputs.version_tag }}
@@ -80,8 +78,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ inputs.role_to_assume }}
           aws-region: ${{ inputs.aws_region }}
 
       - name: Login to Amazon ECR
