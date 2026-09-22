@@ -146,11 +146,11 @@ or the `reusable-version-info.yml` workflow, depending on your environment manag
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 This workflow outputs:
-- `image_registry`: the image the docker image repository, including the image registry
-- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
+- `image_registry`: The Docker image repository the image was pushed to, including the image registry
+- `image_uri`: The full URI of the Docker image, including the image registry, repository, and tag
 
 > [!TIP]
-> This workflow uses [GitHub's OIDC provider](https://github.com/aws-actions/configure-aws-credentials#oidc-configuration-details) to get the short-lived AWS credentials needed for this action. If you're using this action to push images into an AWS account with a HyP3 deployment, the AWS IAM configuration is likely managed as part of the [hyp3-ci stack](https://github.com/ASFHyP3/hyp3#enable-cicd). 
+> This workflow uses [GitHub's OIDC provider](https://github.com/aws-actions/configure-aws-credentials#oidc-configuration-details) to obtain the short-lived AWS credentials required for this action. If you're using this action to push images into an AWS account with a HyP3 deployment, the AWS IAM configuration is likely managed as part of the [HyP3 CI/CD stack](https://github.com/ASFHyP3/hyp3#enable-cicd). 
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
@@ -216,8 +216,8 @@ or the `reusable-version-info.yml` workflow, depending on your environment manag
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 This workflow outputs:
-- `image_registry`: the image the docker image repository, including the image registry
-- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
+- `image_registry`: The Docker image repository the image was pushed to, including the image registry
+- `image_uri`: The full URI of the Docker image, including the image registry, repository, and tag
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
