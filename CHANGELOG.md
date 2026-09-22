@@ -11,6 +11,19 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - `reusable-pixi-tasks.yml`: A reusable `pixi` task runner for running a matrix of `pixi` tasks in `pixi` environments.
 - `reusable-pixi-version-info.yml`: A reusable version info workflow that uses `pixi` as the environment manager instead of `mamba`/`conda`.
+- The reusable docker workflows (AWS ECR and GHCR) now accept these new optional inputs:
+  - `fetch_depth`, to specify the number of commits fetched when checking out
+  - `provenance`, to specify whether to generate provenance attestations for the build or not
+  - `platforms`, a comma-separated list of target platforms to build for
+  - `build_args`, a new-line separated list of docker build arguments like "arg=value"
+  The default values of these arguments a set to maintain backwards compatibility of this workflow.
+- The reusable docker workflows now provide these outputs:
+  - `image_repository`, the image repository the docker image was pushed to and includes the image registry
+  - `image_uri`, the full URI of the docker image including the image registry, repository, and tag
+
+### Changed
+- :warning: The reusable docker AWS ECR workflow now uses OIDC for authentication.
+- The reusable docker workflows (AWS ECR and GHCR) will now only add `test` and `latest` image tags when the calling event is a `push` event, instead of doing so for any not `pull_request` event, allowing `workflow_dispatch` events to build images without potentially clobbering the `test` or `latest` tag.
 
 ## [0.21.1]
 

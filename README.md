@@ -145,6 +145,13 @@ with the specified version tag. This workflow is best paired with either the `re
 or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
+This workflow outputs:
+- `image_registry`: the image the docker image repository, including the image registry
+- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
+
+> [!TIP]
+> This workflow uses [GitHub's OIDC provider](https://github.com/aws-actions/configure-aws-credentials#oidc-configuration-details) to get the short-lived AWS credentials needed for this action. If you're using this action to push images into an AWS account with a HyP3 deployment, the AWS IAM configuration is likely managed as part of the [hyp3-ci stack](https://github.com/ASFHyP3/hyp3#enable-cicd). 
+
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
 > all [non-developmental](https://peps.python.org/pep-0440/#developmental-releases) versions.
@@ -178,12 +185,26 @@ jobs:
       contents: read
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
-      ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
+      role_to_assume: arn:aws:iam::123456789100:role/my-github-actions-role
+      ecr_registry: 123456789100.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
+      fetch_depth: 0           # Optional; default shown
       file: Dockerfile         # Optional; default shown
+      provenance: true         # Optional; default shown
+      platforms: ''            # Optional; default shown
+      build_args: ''           # Optional; default shown
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ecr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ecr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-docker-ghcr.yml`](./.github/workflows/reusable-docker-ghcr.yml)
@@ -193,6 +214,10 @@ Builds a Docker image from the `Dockerfile` in the repository root and pushes it
 with the specified version tag. This workflow is best paired with either the `reusable-pixi-version-info.yml` workflow
 or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+This workflow outputs:
+- `image_registry`: the image the docker image repository, including the image registry
+- `image_uri`: the full URI of the docker image including the image registry, repository, and tag
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
@@ -231,9 +256,22 @@ jobs:
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
-      file: Dockerfile # Optional; default shown
+      fetch_depth: 0      # Optional; default shown
+      file: Dockerfile    # Optional; default shown
+      provenance: true    # Optional; default shown
+      platforms: ''       # Optional; default shown
+      build_args: ''      # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ghcr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ghcr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
