@@ -9,6 +9,8 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.22.0]
 
 ### Added
+- `reusable-pixi-tasks.yml`: A reusable `pixi` task runner for running a matrix of `pixi` tasks in `pixi` environments.
+- `reusable-pixi-version-info.yml`: A reusable version info workflow that uses `pixi` as the environment manager instead of `mamba`/`conda`.
 - The reusable docker workflows (AWS ECR and GHCR) now accept these new optional inputs:
   - `fetch_depth`, to specify the number of commits fetched when checking out
   - `provenance`, to specify whether to generate provenance attestations for the build or not

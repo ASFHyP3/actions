@@ -141,7 +141,8 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag. This workflow is best paired with either the `reusable-pixi-version-info.yml` workflow
+or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 This workflow outputs:
@@ -170,12 +171,12 @@ on:
       - develop
 
 jobs:
-  call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.1
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
     permissions:
       contents: read
     with:
-      python_version: '3.12'        # Optional; default shown
+      environment: default        # Optional; default shown
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
@@ -210,7 +211,8 @@ jobs:
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag. This workflow is best paired with either the `reusable-pixi-version-info.yml` workflow
+or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
 
 This workflow outputs:
@@ -238,12 +240,12 @@ on:
       - develop
 
 jobs:
-  call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.1
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
     permissions:
       contents: read
     with:
-      python_version: '3.12'        # Optional; default shown
+      environment: default        # Optional; default shown
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
@@ -458,6 +460,59 @@ jobs:
 ```
 to ensure a release label is included on any PR to `main`.
 
+### [`reusable-pixi-tasks.yml`](./.github/workflows/reusable-pixi-tasks.yml)
+
+Run [`pixi` tasks](https://pixi.prefix.dev/latest/workspace/advanced_tasks/) for your project as defined in your
+`pixi.toml` or `pyproject.toml` files. This will run a matrix of jobs for every combination of the environments and tasks provided.  
+
+This is commonly used for running static analysis tasks and testing. For static analysis, you may use it like:
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-pixi-tasks-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-tasks.yml@support-pixi
+    with:
+      environments: >-  # Optional; default shown
+        ["default"]
+      tasks: >-
+        [
+          "mypy",
+          "ruff check --output-format=github",
+          "ruff format --diff"
+        ]
+    permissions:
+      contents: read
+```
+
+Or for testing, you may use it like:
+```yaml
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-pixi-tasks-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-tasks.yml@support-pixi
+    with:
+      environments: >-
+        ["py310", "py311", "py312"]
+      tasks: >-
+        ["tests"]
+    permissions:
+      contents: read
+ ```
+
 ### [`reusable-pypi.yml`](./.github/workflows/reusable-pypi.yml)
 
 Run [Python Build](https://github.com/pypa/build) to create source and binary (wheel) distributions of your package and
@@ -641,4 +696,44 @@ jobs:
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"
           echo "version tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}"
 ```
-This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` and `reusable-docker-erc.yml` workflows.
+
+### [`reusable-pixi-version-info.yml`](./.github/workflows/reusable-pixi-version-info.yml)
+
+Outputs the version number of the calling repositories Python package by running
+[`python -m setuptools_scm`](https://github.com/pypa/setuptools_scm#pyprojecttoml-usage) from the repository root.
+Requires [`pixi`](https://pixi.prefix.dev/latest/) as the repository's environment manager with the `pixi` project
+configured via a `pixi.toml` file or the `pyproject.toml` file.
+This workflow will additionally output a Docker tag compatible version number. Use like:
+
+```yaml
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
+    permissions:
+      contents: read
+    with:
+      environment: default        # Optional; default shown
+
+  echo-pixi-version-info-outputs:
+    needs: call-pixi-version-info-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "version: ${{ needs.call-pixi-version-info-workflow.outputs.version }}"
+          echo "version tag: ${{ needs.call-pixi-version-info-workflow.outputs.version_tag }}"
+```
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` and `reusable-docker-erc.yml` workflows.
