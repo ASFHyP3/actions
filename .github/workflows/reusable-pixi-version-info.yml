@@ -19,7 +19,7 @@ jobs:
       version: ${{ steps.set_outputs.outputs.version }}
       version_tag: ${{ steps.set_outputs.outputs.version_tag }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
