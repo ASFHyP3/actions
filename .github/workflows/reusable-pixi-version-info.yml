@@ -1,9 +1,9 @@
 on:
   workflow_call:
     inputs:
-      python_version:
+      environment:
         required: false
-        default: '3.12'
+        default: default
         type: string
     outputs:
       version:
@@ -23,15 +23,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: mamba-org/setup-micromamba@v3
+      - uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          environment-file: environment.yml
-          create-args: >-
-            python=${{ inputs.python_version }}
+          activate-environment: ${{ inputs.environment }}
 
       - name: set outputs
         id: set_outputs
-        shell: bash -l {0}
         run: |
           export SDIST_VERSION=$(python -m setuptools_scm)
           echo "version=${SDIST_VERSION}" >> $GITHUB_OUTPUT

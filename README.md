@@ -32,7 +32,7 @@ jobs:
   call-bump-version-workflow:
     # For first-time setup, create a v0.0.0 tag as shown here:
     # https://github.com/ASFHyP3/actions#reusable-bump-versionyml
-    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-bump-version.yml@v0.21.1
     permissions: {}
     with:
       user: tools-bot                # Optional; default shown
@@ -74,7 +74,7 @@ on:
 
 jobs:
   call-changelog-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-changelog-check.yml@v0.21.1
     permissions:
       contents: read
 ```
@@ -105,7 +105,7 @@ on:
 
 jobs:
   call-create-jira-issue-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-create-jira-issue.yml@v0.21.1
     permissions:
       issues: write
     secrets:
@@ -141,8 +141,16 @@ Therefore, to determine both the custom field name and the sprint ID, do the fol
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the
 [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag. This workflow is best paired with either the `reusable-pixi-version-info.yml` workflow
+or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+This workflow outputs:
+- `image_registry`: The Docker image repository the image was pushed to, including the image registry
+- `image_uri`: The full URI of the Docker image, including the image registry, repository, and tag
+
+> [!TIP]
+> This workflow uses [GitHub's OIDC provider](https://github.com/aws-actions/configure-aws-credentials#oidc-configuration-details) to obtain the short-lived AWS credentials required for this action. If you're using this action to push images into an AWS account with a HyP3 deployment, the AWS IAM configuration is likely managed as part of the [HyP3 CI/CD stack](https://github.com/ASFHyP3/hyp3#enable-cicd). 
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
@@ -163,34 +171,53 @@ on:
       - develop
 
 jobs:
-  call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.0
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
     permissions:
       contents: read
     with:
-      python_version: '3.12'        # Optional; default shown
+      environment: default        # Optional; default shown
 
   call-docker-ecr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ecr.yml@v0.21.1
     permissions:
       contents: read
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
-      ecr_registry: 845172464411.dkr.ecr.us-west-2.amazonaws.com
+      role_to_assume: arn:aws:iam::123456789100:role/my-github-actions-role
+      ecr_registry: 123456789100.dkr.ecr.us-west-2.amazonaws.com
       aws_region: us-west-2    # Optional; default shown
+      fetch_depth: 0           # Optional; default shown
       file: Dockerfile         # Optional; default shown
+      provenance: true         # Optional; default shown
+      platforms: ''            # Optional; default shown
+      build_args: ''           # Optional; default shown
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ecr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ecr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-docker-ghcr.yml`](./.github/workflows/reusable-docker-ghcr.yml)
 
 Builds a Docker image from the `Dockerfile` in the repository root and pushes it to the 
 [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-with the specified version tag, and is best paired with the `reusable-version-info.yml` workflow. This workflow will
+with the specified version tag. This workflow is best paired with either the `reusable-pixi-version-info.yml` workflow
+or the `reusable-version-info.yml` workflow, depending on your environment manager (`pixi` and `mamba`/`conda`, respectively). This workflow will
 additionally push the image with a `latest` tag for releases and a `test` tag for pushes to the develop branch.
+
+This workflow outputs:
+- `image_registry`: The Docker image repository the image was pushed to, including the image registry
+- `image_uri`: The full URI of the Docker image, including the image registry, repository, and tag
 
 > [!WARNING]
 > This action assumes version numbers follow [PEP-440](https://peps.python.org/pep-0440/) and applies the `latest` tag to
@@ -213,25 +240,38 @@ on:
       - develop
 
 jobs:
-  call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.0
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
     permissions:
       contents: read
     with:
-      python_version: '3.12'        # Optional; default shown
+      environment: default        # Optional; default shown
 
   call-docker-ghcr-workflow:
     needs: call-version-info-workflow
-    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-docker-ghcr.yml@v0.21.1
     permissions:
       contents: read
       packages: write
     with:
       version_tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}
       user: ${{ github.actor }}
-      file: Dockerfile # Optional; default shown
+      fetch_depth: 0      # Optional; default shown
+      file: Dockerfile    # Optional; default shown
+      provenance: true    # Optional; default shown
+      platforms: ''       # Optional; default shown
+      build_args: ''      # Optional; default shown
     secrets:
       USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  echo-docker-workflow-outputs:
+    needs: call-docker-ecr-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "image repository: ${{ needs.call-docker-ghcr-workflow.outputs.image_repository }}"
+          echo "image uri: ${{ needs.call-docker-ghcr-workflow.outputs.image_uri }}"
 ```
 
 ### [`reusable-ruff.yml`](./.github/workflows/reusable-ruff.yml)
@@ -245,7 +285,7 @@ on: push
 
 jobs:
   call-ruff-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-ruff.yml@v0.21.1
     permissions:
       contents: read
     with:
@@ -347,7 +387,7 @@ on: push
 
 jobs:
   call-mypy-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-mypy.yml@v0.21.1
     permissions:
       contents: read
     with:
@@ -414,11 +454,64 @@ on:
 
 jobs:
   call-labeled-pr-check-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-labeled-pr-check.yml@v0.21.1
     permissions:
       pull-requests: read
 ```
 to ensure a release label is included on any PR to `main`.
+
+### [`reusable-pixi-tasks.yml`](./.github/workflows/reusable-pixi-tasks.yml)
+
+Run [`pixi` tasks](https://pixi.prefix.dev/latest/workspace/advanced_tasks/) for your project as defined in your
+`pixi.toml` or `pyproject.toml` files. This will run a matrix of jobs for every combination of the environments and tasks provided.  
+
+This is commonly used for running static analysis tasks and testing. For static analysis, you may use it like:
+```yaml
+name: Static analysis
+
+on: push
+
+jobs:
+  call-pixi-tasks-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-tasks.yml@support-pixi
+    with:
+      environments: >-  # Optional; default shown
+        ["default"]
+      tasks: >-
+        [
+          "mypy",
+          "ruff check --output-format=github",
+          "ruff format --diff"
+        ]
+    permissions:
+      contents: read
+```
+
+Or for testing, you may use it like:
+```yaml
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-pixi-tasks-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-tasks.yml@support-pixi
+    with:
+      environments: >-
+        ["py310", "py311", "py312"]
+      tasks: >-
+        ["tests"]
+    permissions:
+      contents: read
+ ```
 
 ### [`reusable-pypi.yml`](./.github/workflows/reusable-pypi.yml)
 
@@ -439,7 +532,7 @@ on:
 
 jobs:
   call-pypi-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pypi.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pypi.yml@v0.21.1
     permissions:
       contents: read
     with:
@@ -469,7 +562,7 @@ on:
 
 jobs:
   call-pytest-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-pytest.yml@v0.21.1
     permissions:
       contents: read
     with:
@@ -500,7 +593,7 @@ on:
 
 jobs:
   call-release-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release.yml@v0.21.1
     permissions: {}
     with:
       release_prefix: HyP3-CI
@@ -530,7 +623,7 @@ on:
   
 jobs:
   call-release-checklist-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-release-checklist-comment.yml@v0.21.1
     permissions:
       pull-requests: write
     with:
@@ -560,7 +653,7 @@ on: push
 
 jobs:
   call-secrets-analysis-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-secrets-analysis.yml@v0.21.1
     permissions:
       contents: read
 ```
@@ -588,7 +681,7 @@ on:
 
 jobs:
   call-version-info-workflow:
-    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.0
+    uses: ASFHyP3/actions/.github/workflows/reusable-version-info.yml@v0.21.1
     permissions:
       contents: read
     with:
@@ -603,4 +696,44 @@ jobs:
           echo "version: ${{ needs.call-version-info-workflow.outputs.version }}"
           echo "version tag: ${{ needs.call-version-info-workflow.outputs.version_tag }}"
 ```
-This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` workflow.
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` and `reusable-docker-erc.yml` workflows.
+
+### [`reusable-pixi-version-info.yml`](./.github/workflows/reusable-pixi-version-info.yml)
+
+Outputs the version number of the calling repositories Python package by running
+[`python -m setuptools_scm`](https://github.com/pypa/setuptools_scm#pyprojecttoml-usage) from the repository root.
+Requires [`pixi`](https://pixi.prefix.dev/latest/) as the repository's environment manager with the `pixi` project
+configured via a `pixi.toml` file or the `pyproject.toml` file.
+This workflow will additionally output a Docker tag compatible version number. Use like:
+
+```yaml
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  call-pixi-version-info-workflow:
+    uses: ASFHyP3/actions/.github/workflows/reusable-pixi-version-info.yml@v0.21.1
+    permissions:
+      contents: read
+    with:
+      environment: default        # Optional; default shown
+
+  echo-pixi-version-info-outputs:
+    needs: call-pixi-version-info-workflow
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: |
+          echo "version: ${{ needs.call-pixi-version-info-workflow.outputs.version }}"
+          echo "version tag: ${{ needs.call-pixi-version-info-workflow.outputs.version_tag }}"
+```
+This workflow is intended to be paired with workflows like the `reusable-docker-ghcr.yml` and `reusable-docker-erc.yml` workflows.
