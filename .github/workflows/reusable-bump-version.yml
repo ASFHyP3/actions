@@ -107,13 +107,13 @@ jobs:
         if: env.BUMP_PART != 'bumpless'
         run: |
           python -m pip install --upgrade pip
-          python -m pip install bump2version
+          python -m pip install bump-my-version
 
       - name: Tag version
         if: env.BUMP_PART != 'bumpless'
         run: |
           git config user.email ${{ inputs.email }}
           git config user.name ${{ inputs.user }}
-          bump2version --current-version $(git describe --abbrev=0) --tag --tag-message "${TAG_MSG}" "${BUMP_PART}"
+          bump-my-version bump --current-version $(git describe --abbrev=0) --tag --tag-message "${TAG_MSG}" "${BUMP_PART}"
           git push --tags
           echo "Tagged version $(git describe --abbrev=0) and pushed back to repo"
